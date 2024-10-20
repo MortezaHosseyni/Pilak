@@ -32,6 +32,8 @@
             tab_MainTab = new TabControl();
             tbp_DetectByPicture = new TabPage();
             tbp_DetectRealtime = new TabPage();
+            tbp_RegisteredPlates = new TabPage();
+            tbp_RegisteredPersons = new TabPage();
             tab_MainTab.SuspendLayout();
             SuspendLayout();
             // 
@@ -40,6 +42,8 @@
             tab_MainTab.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tab_MainTab.Controls.Add(tbp_DetectByPicture);
             tab_MainTab.Controls.Add(tbp_DetectRealtime);
+            tab_MainTab.Controls.Add(tbp_RegisteredPlates);
+            tab_MainTab.Controls.Add(tbp_RegisteredPersons);
             tab_MainTab.Location = new Point(12, 12);
             tab_MainTab.Name = "tab_MainTab";
             tab_MainTab.SelectedIndex = 0;
@@ -66,6 +70,24 @@
             tbp_DetectRealtime.Text = "شناسایی همزمان";
             tbp_DetectRealtime.UseVisualStyleBackColor = true;
             // 
+            // tbp_RegisteredPlates
+            // 
+            tbp_RegisteredPlates.Location = new Point(4, 24);
+            tbp_RegisteredPlates.Name = "tbp_RegisteredPlates";
+            tbp_RegisteredPlates.Size = new Size(974, 558);
+            tbp_RegisteredPlates.TabIndex = 2;
+            tbp_RegisteredPlates.Text = "پلاک‌های ثبت شده";
+            tbp_RegisteredPlates.UseVisualStyleBackColor = true;
+            // 
+            // tbp_RegisteredPersons
+            // 
+            tbp_RegisteredPersons.Location = new Point(4, 24);
+            tbp_RegisteredPersons.Name = "tbp_RegisteredPersons";
+            tbp_RegisteredPersons.Size = new Size(974, 558);
+            tbp_RegisteredPersons.TabIndex = 3;
+            tbp_RegisteredPersons.Text = "شهروندان ثبت شده";
+            tbp_RegisteredPersons.UseVisualStyleBackColor = true;
+            // 
             // formMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -84,5 +106,7 @@
         private TabControl tab_MainTab;
         private TabPage tbp_DetectByPicture;
         private TabPage tbp_DetectRealtime;
+        private TabPage tbp_RegisteredPlates;
+        private TabPage tbp_RegisteredPersons;
     }
 }
