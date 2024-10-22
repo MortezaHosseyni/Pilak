@@ -1,6 +1,6 @@
 ﻿namespace Pilak
 {
-    partial class ucPersonInformation
+    partial class UcPersonInformation
     {
         /// <summary> 
         /// Required designer variable.
@@ -261,7 +261,7 @@
             Controls.Add(img_Picture);
             Font = new Font("IRANSansX", 9F);
             Margin = new Padding(3, 4, 3, 4);
-            Name = "ucPersonInformation";
+            Name = "UcPersonInformation";
             Size = new Size(484, 647);
             ((System.ComponentModel.ISupportInitialize)img_Picture).EndInit();
             ResumeLayout(false);

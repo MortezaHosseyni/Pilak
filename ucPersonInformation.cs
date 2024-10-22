@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace Pilak
+﻿namespace Pilak
 {
-    public partial class ucPersonInformation : UserControl
+    public partial class UcPersonInformation : UserControl
     {
-        public ucPersonInformation()
+        public UcPersonInformation()
         {
             InitializeComponent();
         }
