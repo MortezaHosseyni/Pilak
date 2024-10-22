@@ -39,6 +39,7 @@
             img_PlateImage = new PictureBox();
             tbp_DetectRealtime = new TabPage();
             pnl_RealTimeDetection = new Panel();
+            btn_ChooseCamera = new Button();
             cmb_Cameras = new ComboBox();
             rtb_RealTimeDetectionLog = new RichTextBox();
             btn_RealTimeDetect = new Button();
@@ -46,8 +47,23 @@
             pnl_rtTab_UserInformation = new Panel();
             ucPersonInformation1 = new ucPersonInformation();
             tbp_RegisteredPlates = new TabPage();
+            pnl_AddPlate = new Panel();
+            lbl_ExpiryDate = new Label();
+            lbl_IssueDate = new Label();
+            dtp_ExpiryDate = new DateTimePicker();
+            dtp_IssueDate = new DateTimePicker();
+            cmb_PlatePerson = new ComboBox();
+            btn_AddPlate = new Button();
+            txt_CityCode = new TextBox();
+            txt_PlateSecondDigit = new TextBox();
+            cmb_PlateLetter = new ComboBox();
+            txt_PlateFirstDigit = new TextBox();
+            dgv_Plates = new DataGridView();
+            col_plate_Plate = new DataGridViewTextBoxColumn();
+            col_plate_IssuedDate = new DataGridViewTextBoxColumn();
+            col_plate_ExpiryDate = new DataGridViewTextBoxColumn();
+            col_plate_CreatedAt = new DataGridViewTextBoxColumn();
             tbp_RegisteredPersons = new TabPage();
-            btn_ChooseCamera = new Button();
             tab_MainTab.SuspendLayout();
             tbp_DetectByPicture.SuspendLayout();
             pnl_UserInformation.SuspendLayout();
@@ -57,6 +73,9 @@
             pnl_RealTimeDetection.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)img_Camera).BeginInit();
             pnl_rtTab_UserInformation.SuspendLayout();
+            tbp_RegisteredPlates.SuspendLayout();
+            pnl_AddPlate.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_Plates).BeginInit();
             SuspendLayout();
             // 
             // tab_MainTab
@@ -153,11 +172,11 @@
             // 
             tbp_DetectRealtime.Controls.Add(pnl_RealTimeDetection);
             tbp_DetectRealtime.Controls.Add(pnl_rtTab_UserInformation);
-            tbp_DetectRealtime.Location = new Point(4, 27);
+            tbp_DetectRealtime.Location = new Point(4, 24);
             tbp_DetectRealtime.Margin = new Padding(3, 4, 3, 4);
             tbp_DetectRealtime.Name = "tbp_DetectRealtime";
             tbp_DetectRealtime.Padding = new Padding(3, 4, 3, 4);
-            tbp_DetectRealtime.Size = new Size(974, 672);
+            tbp_DetectRealtime.Size = new Size(974, 675);
             tbp_DetectRealtime.TabIndex = 1;
             tbp_DetectRealtime.Text = "شناسایی همزمان";
             tbp_DetectRealtime.UseVisualStyleBackColor = true;
@@ -174,6 +193,15 @@
             pnl_RealTimeDetection.Name = "pnl_RealTimeDetection";
             pnl_RealTimeDetection.Size = new Size(466, 652);
             pnl_RealTimeDetection.TabIndex = 1;
+            // 
+            // btn_ChooseCamera
+            // 
+            btn_ChooseCamera.Location = new Point(433, 371);
+            btn_ChooseCamera.Name = "btn_ChooseCamera";
+            btn_ChooseCamera.Size = new Size(30, 26);
+            btn_ChooseCamera.TabIndex = 4;
+            btn_ChooseCamera.Text = "✅";
+            btn_ChooseCamera.UseVisualStyleBackColor = true;
             // 
             // cmb_Cameras
             // 
@@ -234,13 +262,160 @@
             // 
             // tbp_RegisteredPlates
             // 
-            tbp_RegisteredPlates.Location = new Point(4, 24);
+            tbp_RegisteredPlates.Controls.Add(pnl_AddPlate);
+            tbp_RegisteredPlates.Controls.Add(dgv_Plates);
+            tbp_RegisteredPlates.Location = new Point(4, 27);
             tbp_RegisteredPlates.Margin = new Padding(3, 4, 3, 4);
             tbp_RegisteredPlates.Name = "tbp_RegisteredPlates";
-            tbp_RegisteredPlates.Size = new Size(974, 675);
+            tbp_RegisteredPlates.Size = new Size(974, 672);
             tbp_RegisteredPlates.TabIndex = 2;
             tbp_RegisteredPlates.Text = "پلاک‌های ثبت شده";
             tbp_RegisteredPlates.UseVisualStyleBackColor = true;
+            // 
+            // pnl_AddPlate
+            // 
+            pnl_AddPlate.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnl_AddPlate.Controls.Add(lbl_ExpiryDate);
+            pnl_AddPlate.Controls.Add(lbl_IssueDate);
+            pnl_AddPlate.Controls.Add(dtp_ExpiryDate);
+            pnl_AddPlate.Controls.Add(dtp_IssueDate);
+            pnl_AddPlate.Controls.Add(cmb_PlatePerson);
+            pnl_AddPlate.Controls.Add(btn_AddPlate);
+            pnl_AddPlate.Controls.Add(txt_CityCode);
+            pnl_AddPlate.Controls.Add(txt_PlateSecondDigit);
+            pnl_AddPlate.Controls.Add(cmb_PlateLetter);
+            pnl_AddPlate.Controls.Add(txt_PlateFirstDigit);
+            pnl_AddPlate.Location = new Point(3, 515);
+            pnl_AddPlate.Name = "pnl_AddPlate";
+            pnl_AddPlate.Size = new Size(968, 139);
+            pnl_AddPlate.TabIndex = 1;
+            // 
+            // lbl_ExpiryDate
+            // 
+            lbl_ExpiryDate.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            lbl_ExpiryDate.AutoSize = true;
+            lbl_ExpiryDate.Location = new Point(437, 83);
+            lbl_ExpiryDate.Name = "lbl_ExpiryDate";
+            lbl_ExpiryDate.Size = new Size(39, 18);
+            lbl_ExpiryDate.TabIndex = 9;
+            lbl_ExpiryDate.Text = "انقضاء";
+            // 
+            // lbl_IssueDate
+            // 
+            lbl_IssueDate.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            lbl_IssueDate.AutoSize = true;
+            lbl_IssueDate.Location = new Point(574, 83);
+            lbl_IssueDate.Name = "lbl_IssueDate";
+            lbl_IssueDate.Size = new Size(34, 18);
+            lbl_IssueDate.TabIndex = 8;
+            lbl_IssueDate.Text = "صدور";
+            // 
+            // dtp_ExpiryDate
+            // 
+            dtp_ExpiryDate.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            dtp_ExpiryDate.Format = DateTimePickerFormat.Short;
+            dtp_ExpiryDate.Location = new Point(346, 78);
+            dtp_ExpiryDate.Name = "dtp_ExpiryDate";
+            dtp_ExpiryDate.Size = new Size(85, 25);
+            dtp_ExpiryDate.TabIndex = 7;
+            // 
+            // dtp_IssueDate
+            // 
+            dtp_IssueDate.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            dtp_IssueDate.Format = DateTimePickerFormat.Short;
+            dtp_IssueDate.Location = new Point(482, 78);
+            dtp_IssueDate.Name = "dtp_IssueDate";
+            dtp_IssueDate.Size = new Size(86, 25);
+            dtp_IssueDate.TabIndex = 6;
+            // 
+            // cmb_PlatePerson
+            // 
+            cmb_PlatePerson.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            cmb_PlatePerson.FormattingEnabled = true;
+            cmb_PlatePerson.Location = new Point(346, 13);
+            cmb_PlatePerson.Name = "cmb_PlatePerson";
+            cmb_PlatePerson.Size = new Size(262, 26);
+            cmb_PlatePerson.TabIndex = 5;
+            // 
+            // btn_AddPlate
+            // 
+            btn_AddPlate.Anchor = AnchorStyles.Bottom;
+            btn_AddPlate.Location = new Point(346, 106);
+            btn_AddPlate.Name = "btn_AddPlate";
+            btn_AddPlate.Size = new Size(262, 24);
+            btn_AddPlate.TabIndex = 4;
+            btn_AddPlate.Text = "ثبت پلاک";
+            btn_AddPlate.UseVisualStyleBackColor = true;
+            // 
+            // txt_CityCode
+            // 
+            txt_CityCode.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            txt_CityCode.Location = new Point(556, 46);
+            txt_CityCode.Name = "txt_CityCode";
+            txt_CityCode.Size = new Size(52, 25);
+            txt_CityCode.TabIndex = 3;
+            // 
+            // txt_PlateSecondDigit
+            // 
+            txt_PlateSecondDigit.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            txt_PlateSecondDigit.Location = new Point(454, 46);
+            txt_PlateSecondDigit.Name = "txt_PlateSecondDigit";
+            txt_PlateSecondDigit.Size = new Size(96, 25);
+            txt_PlateSecondDigit.TabIndex = 2;
+            // 
+            // cmb_PlateLetter
+            // 
+            cmb_PlateLetter.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            cmb_PlateLetter.FormattingEnabled = true;
+            cmb_PlateLetter.Items.AddRange(new object[] { "الف", "ب", "پ", "ت", "ث", "ج", "چ", "ح", "خ", "د", "ذ", "ر", "ز", "ژ", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ک", "گ", "ل", "م", "ن", "و", "ه", "ی" });
+            cmb_PlateLetter.Location = new Point(402, 45);
+            cmb_PlateLetter.Name = "cmb_PlateLetter";
+            cmb_PlateLetter.Size = new Size(46, 26);
+            cmb_PlateLetter.TabIndex = 1;
+            // 
+            // txt_PlateFirstDigit
+            // 
+            txt_PlateFirstDigit.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            txt_PlateFirstDigit.Location = new Point(346, 45);
+            txt_PlateFirstDigit.Name = "txt_PlateFirstDigit";
+            txt_PlateFirstDigit.Size = new Size(50, 25);
+            txt_PlateFirstDigit.TabIndex = 0;
+            // 
+            // dgv_Plates
+            // 
+            dgv_Plates.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgv_Plates.BackgroundColor = Color.FromArgb(224, 224, 224);
+            dgv_Plates.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgv_Plates.Columns.AddRange(new DataGridViewColumn[] { col_plate_Plate, col_plate_IssuedDate, col_plate_ExpiryDate, col_plate_CreatedAt });
+            dgv_Plates.Location = new Point(3, 3);
+            dgv_Plates.Name = "dgv_Plates";
+            dgv_Plates.RightToLeft = RightToLeft.Yes;
+            dgv_Plates.Size = new Size(968, 491);
+            dgv_Plates.TabIndex = 0;
+            // 
+            // col_plate_Plate
+            // 
+            col_plate_Plate.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            col_plate_Plate.HeaderText = "مشخصات پلاک";
+            col_plate_Plate.Name = "col_plate_Plate";
+            // 
+            // col_plate_IssuedDate
+            // 
+            col_plate_IssuedDate.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            col_plate_IssuedDate.HeaderText = "تاریخ صدور";
+            col_plate_IssuedDate.Name = "col_plate_IssuedDate";
+            // 
+            // col_plate_ExpiryDate
+            // 
+            col_plate_ExpiryDate.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            col_plate_ExpiryDate.HeaderText = "تاریخ انقضاء";
+            col_plate_ExpiryDate.Name = "col_plate_ExpiryDate";
+            // 
+            // col_plate_CreatedAt
+            // 
+            col_plate_CreatedAt.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            col_plate_CreatedAt.HeaderText = "تاریخ ثبت در سیستم";
+            col_plate_CreatedAt.Name = "col_plate_CreatedAt";
             // 
             // tbp_RegisteredPersons
             // 
@@ -251,15 +426,6 @@
             tbp_RegisteredPersons.TabIndex = 3;
             tbp_RegisteredPersons.Text = "شهروندان ثبت شده";
             tbp_RegisteredPersons.UseVisualStyleBackColor = true;
-            // 
-            // btn_ChooseCamera
-            // 
-            btn_ChooseCamera.Location = new Point(433, 371);
-            btn_ChooseCamera.Name = "btn_ChooseCamera";
-            btn_ChooseCamera.Size = new Size(30, 26);
-            btn_ChooseCamera.TabIndex = 4;
-            btn_ChooseCamera.Text = "✅";
-            btn_ChooseCamera.UseVisualStyleBackColor = true;
             // 
             // formMain
             // 
@@ -281,6 +447,10 @@
             pnl_RealTimeDetection.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)img_Camera).EndInit();
             pnl_rtTab_UserInformation.ResumeLayout(false);
+            tbp_RegisteredPlates.ResumeLayout(false);
+            pnl_AddPlate.ResumeLayout(false);
+            pnl_AddPlate.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_Plates).EndInit();
             ResumeLayout(false);
         }
 
@@ -305,5 +475,21 @@
         private RichTextBox rtb_RealTimeDetectionLog;
         private ComboBox cmb_Cameras;
         private Button btn_ChooseCamera;
+        private DataGridView dgv_Plates;
+        private Panel pnl_AddPlate;
+        private ComboBox cmb_PlateLetter;
+        private TextBox txt_PlateFirstDigit;
+        private TextBox txt_PlateSecondDigit;
+        private TextBox txt_CityCode;
+        private Button btn_AddPlate;
+        private ComboBox cmb_PlatePerson;
+        private DataGridViewTextBoxColumn col_plate_Plate;
+        private DataGridViewTextBoxColumn col_plate_IssuedDate;
+        private DataGridViewTextBoxColumn col_plate_ExpiryDate;
+        private DataGridViewTextBoxColumn col_plate_CreatedAt;
+        private DateTimePicker dtp_IssueDate;
+        private DateTimePicker dtp_ExpiryDate;
+        private Label lbl_ExpiryDate;
+        private Label lbl_IssueDate;
     }
 }
