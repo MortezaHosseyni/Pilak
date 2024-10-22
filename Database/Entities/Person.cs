@@ -6,8 +6,10 @@ namespace Pilak.Database.Entities
 {
     public class Person : BaseEntity
     {
+        [Required][MaxLength(225)] public string NationalCode { get; private set; }
         [Required][MaxLength(225)] public string FirstName { get; private set; }
         [Required][MaxLength(225)] public string LastName { get; private set; }
+        [Required][MaxLength(225)] public string FatherName { get; private set; }
         [Required][MaxLength(800)] public string Address { get; private set; }
         [Required][MaxLength(11)] public string PhoneNumber { get; private set; }
         [MaxLength(500)] public string? Bio { get; private set; }
@@ -18,20 +20,36 @@ namespace Pilak.Database.Entities
         public virtual ICollection<License>? Licenses { get; set; }
         #endregion
 
-        public Person(string firstName, string lastName, string address, string phoneNumber, string? bio, string picture)
+        public Person(string nationalCode, string firstName, string lastName, string fatherName, string address, string phoneNumber, string? bio, string picture)
         {
+            if (!string.IsNullOrEmpty(nationalCode) && !Regex.IsMatch(nationalCode, @"^\d+$") && nationalCode?.Length > 10)
+            {
+                MessageBox.Show("کد ملی نامعتبر میباشد.", "خطا: کد ملی", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new Exception("The national code must be 10 digits.");
+            }
+            NationalCode = Sanitize.Clarify(nationalCode);
+
             FirstName = Sanitize.Clarify(firstName);
             LastName = Sanitize.Clarify(lastName);
+
+            FatherName = Sanitize.Clarify(fatherName);
+
             Address = Sanitize.Clarify(address);
 
             if (!ValidNumber(phoneNumber))
+            {
                 MessageBox.Show("شماره همراه معتبر نیست.", "خطا: شماره همراه کاربر", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new Exception("Phone number is not valid!");
+            }
             PhoneNumber = phoneNumber;
 
             Bio = Sanitize.Clarify(bio);
 
             if (!string.IsNullOrEmpty(picture) && !Regex.IsMatch(picture, @"^.+\.(png|jpg|jpeg|bmp|webp)$"))
+            {
                 MessageBox.Show("تصویر کاربر معتبر نیست!\nفرمت‌های قابل قبول: png, jpg, jpeg, bmp و webp.", "خطا: تصویر کاربر", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new Exception("User image is invalid.");
+            }
             Picture = picture;
         }
 
