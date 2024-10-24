@@ -174,6 +174,8 @@
             rtb_PlateDetectionLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             rtb_PlateDetectionLog.Location = new Point(3, 402);
             rtb_PlateDetectionLog.Name = "rtb_PlateDetectionLog";
+            rtb_PlateDetectionLog.ReadOnly = true;
+            rtb_PlateDetectionLog.RightToLeft = RightToLeft.Yes;
             rtb_PlateDetectionLog.Size = new Size(460, 250);
             rtb_PlateDetectionLog.TabIndex = 2;
             rtb_PlateDetectionLog.Text = "";
@@ -188,6 +190,7 @@
             btn_SelectPlateImage.TabIndex = 1;
             btn_SelectPlateImage.Text = "بارگذاری تصویر";
             btn_SelectPlateImage.UseVisualStyleBackColor = true;
+            btn_SelectPlateImage.Click += btn_SelectPlateImage_Click;
             // 
             // img_PlateImage
             // 
@@ -743,7 +746,7 @@
             btn_AboutUs.UseVisualStyleBackColor = true;
             btn_AboutUs.Click += btn_AboutUs_Click;
             // 
-            // formMain
+            // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
