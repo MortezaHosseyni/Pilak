@@ -39,7 +39,8 @@
             img_PlateImage = new PictureBox();
             tbp_DetectRealtime = new TabPage();
             pnl_RealTimeDetection = new Panel();
-            btn_ChooseCamera = new Button();
+            btn_StartCamera = new Button();
+            btn_RefreshCameras = new Button();
             cmb_Cameras = new ComboBox();
             rtb_RealTimeDetectionLog = new RichTextBox();
             btn_RealTimeDetect = new Button();
@@ -208,36 +209,50 @@
             // 
             tbp_DetectRealtime.Controls.Add(pnl_RealTimeDetection);
             tbp_DetectRealtime.Controls.Add(pnl_rtTab_UserInformation);
-            tbp_DetectRealtime.Location = new Point(4, 24);
+            tbp_DetectRealtime.Location = new Point(4, 27);
             tbp_DetectRealtime.Margin = new Padding(3, 4, 3, 4);
             tbp_DetectRealtime.Name = "tbp_DetectRealtime";
             tbp_DetectRealtime.Padding = new Padding(3, 4, 3, 4);
-            tbp_DetectRealtime.Size = new Size(974, 675);
+            tbp_DetectRealtime.Size = new Size(974, 672);
             tbp_DetectRealtime.TabIndex = 1;
             tbp_DetectRealtime.Text = "شناسایی همزمان";
             tbp_DetectRealtime.UseVisualStyleBackColor = true;
+            tbp_DetectRealtime.Click += tbp_DetectRealtime_Click;
             // 
             // pnl_RealTimeDetection
             // 
             pnl_RealTimeDetection.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            pnl_RealTimeDetection.Controls.Add(btn_ChooseCamera);
+            pnl_RealTimeDetection.Controls.Add(btn_StartCamera);
+            pnl_RealTimeDetection.Controls.Add(btn_RefreshCameras);
             pnl_RealTimeDetection.Controls.Add(cmb_Cameras);
             pnl_RealTimeDetection.Controls.Add(rtb_RealTimeDetectionLog);
             pnl_RealTimeDetection.Controls.Add(btn_RealTimeDetect);
             pnl_RealTimeDetection.Controls.Add(img_Camera);
             pnl_RealTimeDetection.Location = new Point(6, 7);
             pnl_RealTimeDetection.Name = "pnl_RealTimeDetection";
-            pnl_RealTimeDetection.Size = new Size(466, 649);
+            pnl_RealTimeDetection.Size = new Size(466, 655);
             pnl_RealTimeDetection.TabIndex = 1;
             // 
-            // btn_ChooseCamera
+            // btn_StartCamera
             // 
-            btn_ChooseCamera.Location = new Point(433, 371);
-            btn_ChooseCamera.Name = "btn_ChooseCamera";
-            btn_ChooseCamera.Size = new Size(30, 26);
-            btn_ChooseCamera.TabIndex = 4;
-            btn_ChooseCamera.Text = "✅";
-            btn_ChooseCamera.UseVisualStyleBackColor = true;
+            btn_StartCamera.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            btn_StartCamera.Location = new Point(3, 424);
+            btn_StartCamera.Name = "btn_StartCamera";
+            btn_StartCamera.Size = new Size(460, 27);
+            btn_StartCamera.TabIndex = 5;
+            btn_StartCamera.Text = "فعالسازی دوربین";
+            btn_StartCamera.UseVisualStyleBackColor = true;
+            btn_StartCamera.Click += btn_StartCamera_Click;
+            // 
+            // btn_RefreshCameras
+            // 
+            btn_RefreshCameras.Location = new Point(433, 371);
+            btn_RefreshCameras.Name = "btn_RefreshCameras";
+            btn_RefreshCameras.Size = new Size(30, 26);
+            btn_RefreshCameras.TabIndex = 4;
+            btn_RefreshCameras.Text = "🔄";
+            btn_RefreshCameras.UseVisualStyleBackColor = true;
+            btn_RefreshCameras.Click += btn_RefreshCameras_Click;
             // 
             // cmb_Cameras
             // 
@@ -251,18 +266,20 @@
             // rtb_RealTimeDetectionLog
             // 
             rtb_RealTimeDetectionLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            rtb_RealTimeDetectionLog.Location = new Point(3, 484);
+            rtb_RealTimeDetectionLog.Location = new Point(3, 511);
             rtb_RealTimeDetectionLog.Name = "rtb_RealTimeDetectionLog";
-            rtb_RealTimeDetectionLog.Size = new Size(460, 161);
+            rtb_RealTimeDetectionLog.ReadOnly = true;
+            rtb_RealTimeDetectionLog.RightToLeft = RightToLeft.Yes;
+            rtb_RealTimeDetectionLog.Size = new Size(460, 140);
             rtb_RealTimeDetectionLog.TabIndex = 2;
             rtb_RealTimeDetectionLog.Text = "";
             // 
             // btn_RealTimeDetect
             // 
             btn_RealTimeDetect.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            btn_RealTimeDetect.Location = new Point(3, 400);
+            btn_RealTimeDetect.Location = new Point(3, 457);
             btn_RealTimeDetect.Name = "btn_RealTimeDetect";
-            btn_RealTimeDetect.Size = new Size(460, 43);
+            btn_RealTimeDetect.Size = new Size(460, 27);
             btn_RealTimeDetect.TabIndex = 1;
             btn_RealTimeDetect.Text = "شناسایی";
             btn_RealTimeDetect.UseVisualStyleBackColor = true;
@@ -283,7 +300,7 @@
             pnl_rtTab_UserInformation.Controls.Add(ucPersonInformation1);
             pnl_rtTab_UserInformation.Location = new Point(478, 7);
             pnl_rtTab_UserInformation.Name = "pnl_rtTab_UserInformation";
-            pnl_rtTab_UserInformation.Size = new Size(490, 649);
+            pnl_rtTab_UserInformation.Size = new Size(490, 655);
             pnl_rtTab_UserInformation.TabIndex = 0;
             // 
             // ucPersonInformation1
@@ -293,17 +310,17 @@
             ucPersonInformation1.Location = new Point(3, 4);
             ucPersonInformation1.Margin = new Padding(3, 4, 3, 4);
             ucPersonInformation1.Name = "ucPersonInformation1";
-            ucPersonInformation1.Size = new Size(484, 641);
+            ucPersonInformation1.Size = new Size(484, 647);
             ucPersonInformation1.TabIndex = 0;
             // 
             // tbp_RegisteredPlates
             // 
             tbp_RegisteredPlates.Controls.Add(pnl_AddPlate);
             tbp_RegisteredPlates.Controls.Add(dgv_Plates);
-            tbp_RegisteredPlates.Location = new Point(4, 24);
+            tbp_RegisteredPlates.Location = new Point(4, 27);
             tbp_RegisteredPlates.Margin = new Padding(3, 4, 3, 4);
             tbp_RegisteredPlates.Name = "tbp_RegisteredPlates";
-            tbp_RegisteredPlates.Size = new Size(974, 675);
+            tbp_RegisteredPlates.Size = new Size(974, 672);
             tbp_RegisteredPlates.TabIndex = 2;
             tbp_RegisteredPlates.Text = "پلاک‌های ثبت شده";
             tbp_RegisteredPlates.UseVisualStyleBackColor = true;
@@ -321,7 +338,7 @@
             pnl_AddPlate.Controls.Add(txt_PlateSecondDigit);
             pnl_AddPlate.Controls.Add(cmb_PlateLetter);
             pnl_AddPlate.Controls.Add(txt_PlateFirstDigit);
-            pnl_AddPlate.Location = new Point(3, 491);
+            pnl_AddPlate.Location = new Point(3, 488);
             pnl_AddPlate.Name = "pnl_AddPlate";
             pnl_AddPlate.Size = new Size(968, 175);
             pnl_AddPlate.TabIndex = 1;
@@ -426,7 +443,7 @@
             dgv_Plates.Location = new Point(3, 3);
             dgv_Plates.Name = "dgv_Plates";
             dgv_Plates.RightToLeft = RightToLeft.Yes;
-            dgv_Plates.Size = new Size(968, 482);
+            dgv_Plates.Size = new Size(968, 479);
             dgv_Plates.TabIndex = 0;
             // 
             // col_plate_Plate
@@ -457,10 +474,10 @@
             // 
             tbp_RegisteredPersons.Controls.Add(pnl_AddPerson);
             tbp_RegisteredPersons.Controls.Add(dgv_Persons);
-            tbp_RegisteredPersons.Location = new Point(4, 24);
+            tbp_RegisteredPersons.Location = new Point(4, 27);
             tbp_RegisteredPersons.Margin = new Padding(3, 4, 3, 4);
             tbp_RegisteredPersons.Name = "tbp_RegisteredPersons";
-            tbp_RegisteredPersons.Size = new Size(974, 675);
+            tbp_RegisteredPersons.Size = new Size(974, 672);
             tbp_RegisteredPersons.TabIndex = 3;
             tbp_RegisteredPersons.Text = "شهروندان ثبت شده";
             tbp_RegisteredPersons.UseVisualStyleBackColor = true;
@@ -486,7 +503,7 @@
             pnl_AddPerson.Controls.Add(lbl_LastName);
             pnl_AddPerson.Controls.Add(lbl_FirstName);
             pnl_AddPerson.Controls.Add(lbl_NationalCode);
-            pnl_AddPerson.Location = new Point(3, 488);
+            pnl_AddPerson.Location = new Point(3, 485);
             pnl_AddPerson.Name = "pnl_AddPerson";
             pnl_AddPerson.Size = new Size(968, 169);
             pnl_AddPerson.TabIndex = 1;
@@ -684,7 +701,7 @@
             dgv_Persons.Location = new Point(3, 3);
             dgv_Persons.Name = "dgv_Persons";
             dgv_Persons.RightToLeft = RightToLeft.Yes;
-            dgv_Persons.Size = new Size(968, 482);
+            dgv_Persons.Size = new Size(968, 479);
             dgv_Persons.TabIndex = 0;
             // 
             // col_persons_NationalCode
@@ -759,6 +776,8 @@
             Name = "FormMain";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "پیلاک";
+            FormClosing += FormMain_FormClosing;
+            Load += FormMain_Load;
             tab_MainTab.ResumeLayout(false);
             tbp_DetectByPicture.ResumeLayout(false);
             pnl_UserInformation.ResumeLayout(false);
@@ -800,7 +819,7 @@
         private Button btn_RealTimeDetect;
         private RichTextBox rtb_RealTimeDetectionLog;
         private ComboBox cmb_Cameras;
-        private Button btn_ChooseCamera;
+        private Button btn_RefreshCameras;
         private DataGridView dgv_Plates;
         private Panel pnl_AddPlate;
         private ComboBox cmb_PlateLetter;
@@ -846,5 +865,6 @@
         private DataGridViewTextBoxColumn col_persons_About;
         private DataGridViewTextBoxColumn col_persons_Address;
         private Button btn_AboutUs;
+        private Button btn_StartCamera;
     }
 }
