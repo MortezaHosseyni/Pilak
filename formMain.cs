@@ -1,27 +1,39 @@
 ﻿using AForge.Video;
 using AForge.Video.DirectShow;
 using System.Globalization;
+using Pilak.Database;
+using Pilak.Database.Entities;
+using Pilak.Utilities;
 
 namespace Pilak
 {
     public partial class FormMain : Form
     {
+        private readonly LicenseRepository _license = new LicenseRepository(new ApplicationDbContext());
+        private readonly PersonRepository _person = new PersonRepository(new ApplicationDbContext());
+
         private readonly PersianCalendar _pc = new PersianCalendar();
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
 
         private bool isCameraOn = false;
 
+        private Image? selectedPersonImage;
+
         public FormMain()
         {
             InitializeComponent();
         }
 
-        private void FormMain_Load(object sender, EventArgs e)
+        private async void FormMain_Load(object sender, EventArgs e)
         {
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
             DetectCameras();
+
+            await LoadPersons();
+
+            await LoadPlates();
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -123,11 +135,145 @@ namespace Pilak
             var bitmap = (Bitmap)eventArgs.Frame.Clone();
             img_Camera.Image = bitmap;
         }
-        #endregion
 
         private void tbp_DetectRealtime_Click(object sender, EventArgs e)
         {
 
+        }
+        #endregion
+
+        #region Registered Plates
+        private async Task LoadPlates()
+        {
+            var plates = await _license.Get();
+            dgv_Plates.Rows.Clear();
+
+            foreach (var plate in plates)
+            {
+                var letterCode = LetterMapper.GetLetter(plate.LetterSection ?? string.Empty);
+
+                var combinedSection = $"{plate.CityCode} | {plate.SecondDigitSection} | {letterCode} | {plate.FirstDigitSection}";
+
+                dgv_Plates.Rows.Add(combinedSection, plate.PersonName, plate.IssueDate.ToPersianDate(), plate.ExpiryDate.ToPersianDate(), plate.CreatedAt.ToPersianDate());
+            }
+        }
+
+        private async void btn_AddPlate_Click(object sender, EventArgs e)
+        {
+            if ((string.IsNullOrEmpty(txt_PlateFirstDigit.Text) || txt_PlateFirstDigit.Text.Length != 2) ||
+                string.IsNullOrEmpty(cmb_PlateLetter.Text) ||
+                (string.IsNullOrEmpty(txt_PlateSecondDigit.Text) || txt_PlateSecondDigit.Text.Length != 3) ||
+                (string.IsNullOrEmpty(txt_CityCode.Text) || txt_CityCode.Text.Length != 2) ||
+                string.IsNullOrEmpty(cmb_PlatePerson.Text))
+            {
+                MessageBox.Show("لطفا اطلاعات را به درستی وارد کنید.", "اطلاعات نامعتبر", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            var newPlate = new License()
+            {
+                Id = Guid.NewGuid(),
+                FirstDigitSection = int.Parse(txt_PlateFirstDigit.Text),
+                LetterSection = LetterMapper.GetCode(cmb_PlateLetter.Text),
+                SecondDigitSection = int.Parse(txt_PlateSecondDigit.Text),
+                CityCode = int.Parse(txt_CityCode.Text),
+                PersonId = (Guid)cmb_PlatePerson.SelectedValue!,
+                IssueDate = Convert.ToDateTime(dtp_IssueDate.Text),
+                ExpiryDate = Convert.ToDateTime(dtp_ExpiryDate.Text),
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            await _license.Add(newPlate);
+            await LoadPlates();
+        }
+
+        private void txt_PlateFirstDigit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txt_PlateSecondDigit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txt_CityCode_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+        #endregion
+
+        private async Task LoadPersons()
+        {
+            var persons = await _person.Get();
+            dgv_Persons.Rows.Clear();
+
+            foreach (var person in persons)
+            {
+                dgv_Persons.Rows.Add(person.NationalCode, person.FirstName, person.LastName, person.FatherName, person.PhoneNumber, person.Email, person.Bio, person.Address);
+            }
+
+            cmb_PlatePerson.DataSource = null;
+            cmb_PlatePerson.DataSource = persons;
+            cmb_PlatePerson.DisplayMember = "FullName";
+            cmb_PlatePerson.ValueMember = "Id";
+        }
+
+        private void img_PersonImage_Click(object sender, EventArgs e)
+        {
+            using var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image Files|*.png;*.jpg";
+            openFileDialog.Title = "عکس شهروند را انتخاب کنید.";
+
+            if (openFileDialog.ShowDialog() != DialogResult.OK) return;
+
+            selectedPersonImage = Image.FromFile(openFileDialog.FileName);
+            img_PersonImage.Image = selectedPersonImage;
+            img_PersonImage.SizeMode = PictureBoxSizeMode.StretchImage;
+        }
+
+        private async void btn_AddPerson_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var folderPath = Path.Combine(Application.StartupPath, "person_images");
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                var uniqueFileName = $"{Guid.NewGuid()}.png";
+                var filePath = Path.Combine(folderPath, uniqueFileName);
+                selectedPersonImage?.Save(filePath);
+
+                var newPerson = new Person(txt_NationalCode.Text, txt_FirstName.Text, txt_LastName.Text,
+                    txt_FatherName.Text, rtb_Address.Text, txt_PhoneNumber.Text, txt_About.Text, uniqueFileName)
+                {
+                    Id = Guid.NewGuid(),
+                    Email = txt_Email.Text,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+
+                await _person.Add(newPerson);
+
+                await LoadPersons();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "خطایی رخ داد", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

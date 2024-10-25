@@ -61,6 +61,7 @@
             txt_PlateFirstDigit = new TextBox();
             dgv_Plates = new DataGridView();
             col_plate_Plate = new DataGridViewTextBoxColumn();
+            col_plate_Person = new DataGridViewTextBoxColumn();
             col_plate_IssuedDate = new DataGridViewTextBoxColumn();
             col_plate_ExpiryDate = new DataGridViewTextBoxColumn();
             col_plate_CreatedAt = new DataGridViewTextBoxColumn();
@@ -209,11 +210,11 @@
             // 
             tbp_DetectRealtime.Controls.Add(pnl_RealTimeDetection);
             tbp_DetectRealtime.Controls.Add(pnl_rtTab_UserInformation);
-            tbp_DetectRealtime.Location = new Point(4, 27);
+            tbp_DetectRealtime.Location = new Point(4, 24);
             tbp_DetectRealtime.Margin = new Padding(3, 4, 3, 4);
             tbp_DetectRealtime.Name = "tbp_DetectRealtime";
             tbp_DetectRealtime.Padding = new Padding(3, 4, 3, 4);
-            tbp_DetectRealtime.Size = new Size(974, 672);
+            tbp_DetectRealtime.Size = new Size(974, 675);
             tbp_DetectRealtime.TabIndex = 1;
             tbp_DetectRealtime.Text = "شناسایی همزمان";
             tbp_DetectRealtime.UseVisualStyleBackColor = true;
@@ -338,7 +339,7 @@
             pnl_AddPlate.Controls.Add(txt_PlateSecondDigit);
             pnl_AddPlate.Controls.Add(cmb_PlateLetter);
             pnl_AddPlate.Controls.Add(txt_PlateFirstDigit);
-            pnl_AddPlate.Location = new Point(3, 488);
+            pnl_AddPlate.Location = new Point(3, 476);
             pnl_AddPlate.Name = "pnl_AddPlate";
             pnl_AddPlate.Size = new Size(968, 175);
             pnl_AddPlate.TabIndex = 1;
@@ -399,22 +400,27 @@
             btn_AddPlate.TabIndex = 4;
             btn_AddPlate.Text = "ثبت پلاک";
             btn_AddPlate.UseVisualStyleBackColor = true;
+            btn_AddPlate.Click += btn_AddPlate_Click;
             // 
             // txt_CityCode
             // 
             txt_CityCode.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             txt_CityCode.Location = new Point(555, 54);
+            txt_CityCode.MaxLength = 2;
             txt_CityCode.Name = "txt_CityCode";
             txt_CityCode.Size = new Size(52, 25);
             txt_CityCode.TabIndex = 3;
+            txt_CityCode.KeyPress += txt_CityCode_KeyPress;
             // 
             // txt_PlateSecondDigit
             // 
             txt_PlateSecondDigit.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             txt_PlateSecondDigit.Location = new Point(453, 54);
+            txt_PlateSecondDigit.MaxLength = 3;
             txt_PlateSecondDigit.Name = "txt_PlateSecondDigit";
             txt_PlateSecondDigit.Size = new Size(96, 25);
             txt_PlateSecondDigit.TabIndex = 2;
+            txt_PlateSecondDigit.KeyPress += txt_PlateSecondDigit_KeyPress;
             // 
             // cmb_PlateLetter
             // 
@@ -430,20 +436,24 @@
             // 
             txt_PlateFirstDigit.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             txt_PlateFirstDigit.Location = new Point(345, 53);
+            txt_PlateFirstDigit.MaxLength = 2;
             txt_PlateFirstDigit.Name = "txt_PlateFirstDigit";
             txt_PlateFirstDigit.Size = new Size(50, 25);
             txt_PlateFirstDigit.TabIndex = 0;
+            txt_PlateFirstDigit.KeyPress += txt_PlateFirstDigit_KeyPress;
             // 
             // dgv_Plates
             // 
+            dgv_Plates.AllowUserToAddRows = false;
+            dgv_Plates.AllowUserToDeleteRows = false;
             dgv_Plates.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgv_Plates.BackgroundColor = Color.FromArgb(224, 224, 224);
             dgv_Plates.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_Plates.Columns.AddRange(new DataGridViewColumn[] { col_plate_Plate, col_plate_IssuedDate, col_plate_ExpiryDate, col_plate_CreatedAt });
+            dgv_Plates.Columns.AddRange(new DataGridViewColumn[] { col_plate_Plate, col_plate_Person, col_plate_IssuedDate, col_plate_ExpiryDate, col_plate_CreatedAt });
             dgv_Plates.Location = new Point(3, 3);
             dgv_Plates.Name = "dgv_Plates";
             dgv_Plates.RightToLeft = RightToLeft.Yes;
-            dgv_Plates.Size = new Size(968, 479);
+            dgv_Plates.Size = new Size(968, 467);
             dgv_Plates.TabIndex = 0;
             // 
             // col_plate_Plate
@@ -451,6 +461,12 @@
             col_plate_Plate.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_plate_Plate.HeaderText = "مشخصات پلاک";
             col_plate_Plate.Name = "col_plate_Plate";
+            // 
+            // col_plate_Person
+            // 
+            col_plate_Person.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            col_plate_Person.HeaderText = "به نام";
+            col_plate_Person.Name = "col_plate_Person";
             // 
             // col_plate_IssuedDate
             // 
@@ -474,10 +490,10 @@
             // 
             tbp_RegisteredPersons.Controls.Add(pnl_AddPerson);
             tbp_RegisteredPersons.Controls.Add(dgv_Persons);
-            tbp_RegisteredPersons.Location = new Point(4, 27);
+            tbp_RegisteredPersons.Location = new Point(4, 24);
             tbp_RegisteredPersons.Margin = new Padding(3, 4, 3, 4);
             tbp_RegisteredPersons.Name = "tbp_RegisteredPersons";
-            tbp_RegisteredPersons.Size = new Size(974, 672);
+            tbp_RegisteredPersons.Size = new Size(974, 675);
             tbp_RegisteredPersons.TabIndex = 3;
             tbp_RegisteredPersons.Text = "شهروندان ثبت شده";
             tbp_RegisteredPersons.UseVisualStyleBackColor = true;
@@ -503,7 +519,7 @@
             pnl_AddPerson.Controls.Add(lbl_LastName);
             pnl_AddPerson.Controls.Add(lbl_FirstName);
             pnl_AddPerson.Controls.Add(lbl_NationalCode);
-            pnl_AddPerson.Location = new Point(3, 485);
+            pnl_AddPerson.Location = new Point(3, 500);
             pnl_AddPerson.Name = "pnl_AddPerson";
             pnl_AddPerson.Size = new Size(968, 169);
             pnl_AddPerson.TabIndex = 1;
@@ -517,6 +533,7 @@
             btn_AddPerson.TabIndex = 17;
             btn_AddPerson.Text = "ثبت اطلاعات";
             btn_AddPerson.UseVisualStyleBackColor = true;
+            btn_AddPerson.Click += btn_AddPerson_Click;
             // 
             // img_PersonImage
             // 
@@ -529,6 +546,7 @@
             img_PersonImage.SizeMode = PictureBoxSizeMode.StretchImage;
             img_PersonImage.TabIndex = 16;
             img_PersonImage.TabStop = false;
+            img_PersonImage.Click += img_PersonImage_Click;
             // 
             // rtb_Address
             // 
@@ -694,6 +712,8 @@
             // 
             // dgv_Persons
             // 
+            dgv_Persons.AllowUserToAddRows = false;
+            dgv_Persons.AllowUserToDeleteRows = false;
             dgv_Persons.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgv_Persons.BackgroundColor = Color.FromArgb(224, 224, 224);
             dgv_Persons.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -701,7 +721,7 @@
             dgv_Persons.Location = new Point(3, 3);
             dgv_Persons.Name = "dgv_Persons";
             dgv_Persons.RightToLeft = RightToLeft.Yes;
-            dgv_Persons.Size = new Size(968, 479);
+            dgv_Persons.Size = new Size(968, 491);
             dgv_Persons.TabIndex = 0;
             // 
             // col_persons_NationalCode
@@ -828,10 +848,6 @@
         private TextBox txt_CityCode;
         private Button btn_AddPlate;
         private ComboBox cmb_PlatePerson;
-        private DataGridViewTextBoxColumn col_plate_Plate;
-        private DataGridViewTextBoxColumn col_plate_IssuedDate;
-        private DataGridViewTextBoxColumn col_plate_ExpiryDate;
-        private DataGridViewTextBoxColumn col_plate_CreatedAt;
         private DateTimePicker dtp_IssueDate;
         private DateTimePicker dtp_ExpiryDate;
         private Label lbl_ExpiryDate;
@@ -866,5 +882,10 @@
         private DataGridViewTextBoxColumn col_persons_Address;
         private Button btn_AboutUs;
         private Button btn_StartCamera;
+        private DataGridViewTextBoxColumn col_plate_Plate;
+        private DataGridViewTextBoxColumn col_plate_Person;
+        private DataGridViewTextBoxColumn col_plate_IssuedDate;
+        private DataGridViewTextBoxColumn col_plate_ExpiryDate;
+        private DataGridViewTextBoxColumn col_plate_CreatedAt;
     }
 }

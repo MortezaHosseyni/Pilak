@@ -6,21 +6,23 @@ namespace Pilak.Database.Entities
 {
     public class Person : BaseEntity
     {
-        [Required][MaxLength(225)] public string NationalCode { get; private set; }
-        [Required][MaxLength(225)] public string FirstName { get; private set; }
-        [Required][MaxLength(225)] public string LastName { get; private set; }
-        [Required][MaxLength(225)] public string FatherName { get; private set; }
-        [Required][MaxLength(800)] public string Address { get; private set; }
-        [Required][MaxLength(11)] public string PhoneNumber { get; private set; }
+        [Required(ErrorMessage = "کدملی شهروند را وارد کنید.")][MaxLength(225)] public string NationalCode { get; private set; }
+        [Required(ErrorMessage = "نام شهروند را وارد کنید.")][MaxLength(225)] public string FirstName { get; private set; }
+        [Required(ErrorMessage = "نام‌خانوادگی شهروند را وارد کنید.")][MaxLength(225)] public string LastName { get; private set; }
+        [Required(ErrorMessage = "نام‌ پدر شهروند را وارد کنید.")][MaxLength(225)] public string FatherName { get; private set; }
+        [Required(ErrorMessage = "آدرس شهروند را وارد کنید.")][MaxLength(800)] public string Address { get; private set; }
+        [Required(ErrorMessage = "شماره همراه شهروند را وارد کنید.")][MaxLength(11)] public string PhoneNumber { get; private set; }
         [MaxLength(500)] public string? Bio { get; private set; }
         [EmailAddress][MaxLength(800)] public string? Email { get; set; }
-        [Required][MaxLength(225)] public string Picture { get; private set; }
+        [MaxLength(225)] public string? Picture { get; private set; }
 
         #region Relations
         public virtual ICollection<License>? Licenses { get; set; }
         #endregion
 
-        public Person(string nationalCode, string firstName, string lastName, string fatherName, string address, string phoneNumber, string? bio, string picture)
+        public string FullName => $"{FirstName} {LastName} ({NationalCode})";
+
+        public Person(string nationalCode, string firstName, string lastName, string fatherName, string address, string phoneNumber, string? bio, string? picture)
         {
             if (!string.IsNullOrEmpty(nationalCode) && !Regex.IsMatch(nationalCode, @"^\d+$") && nationalCode?.Length > 10)
             {
