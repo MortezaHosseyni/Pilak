@@ -4,6 +4,7 @@ using System.Globalization;
 using Pilak.Database;
 using Pilak.Database.Entities;
 using Pilak.Utilities;
+using Pilak.ML;
 
 namespace Pilak
 {
@@ -65,7 +66,8 @@ namespace Pilak
             var now =
                 $"{_pc.GetYear(DateTime.Now)}/{_pc.GetMonth(DateTime.Now)}/{_pc.GetDayOfMonth(DateTime.Now)} {DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}";
             rtb_PlateDetectionLog.Text += $"[{now}] تصویر پلاک انتخاب شد.\n";
-            ;
+
+            // TODO: Detect plate using model.
         }
         #endregion
 
