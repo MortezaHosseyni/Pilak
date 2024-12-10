@@ -12,6 +12,8 @@ namespace Pilak.Database
         {
             var databasePath = Path.Combine(Directory.GetCurrentDirectory(), "Pilak.db");
             optionsBuilder.UseSqlite($"Data Source={databasePath};");
+
+            optionsBuilder.EnableSensitiveDataLogging();
         }
     }
 }

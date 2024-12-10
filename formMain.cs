@@ -24,8 +24,14 @@ namespace Pilak
 
         private bool isCameraOn = false;
 
+        private License? EditPlateModel;
+        private bool editPlate;
+        private Person? EditPersonModel;
+        private bool editPerson;
+
         private Image? selectedPersonImage;
 
+        #region Form
         public FormMain(IServiceProvider serviceProvider, ILicenseRepository license, IPersonRepository person, FilterInfoCollection videoDevices, VideoCaptureDevice videoSource)
         {
             InitializeComponent();
@@ -60,6 +66,7 @@ namespace Pilak
         {
             MessageBox.Show("پیلاک\nv1.0\n\n:طراحی و برنامه‌نویسی\nمرتضی حسینی\nسجاد احمد زاده", "درباره ما", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        #endregion
 
         #region Image Detection
         private async void btn_SelectPlateImage_Click(object sender, EventArgs e)
@@ -109,7 +116,7 @@ namespace Pilak
                     MessageBoxIcon.Error);
                 return;
             }
-            
+
             img_PlateImage.Image = Image.FromFile($"predictor\\{result.plateImage}\\image0.jpg");
 
             img_PlateContent.Visible = true;
@@ -126,7 +133,7 @@ namespace Pilak
                 if (createPlate != DialogResult.Yes) return;
 
                 txt_PlateFirstDigit.Text = result.firstDigitSection;
-                cmb_PlateLetter.SelectedItem = result.letterSection;
+                cmb_PlateLetter.SelectedItem = LetterMapper.GetLetter(result.letterSection);
                 txt_PlateSecondDigit.Text = result.secondDigitSection;
                 txt_CityCode.Text = result.cityCode;
                 tab_MainTab.SelectedTab = tab_MainTab.TabPages["tbp_RegisteredPlates"];
@@ -229,7 +236,7 @@ namespace Pilak
 
                 var combinedSection = $"{plate.CityCode} | {plate.SecondDigitSection} | {letterCode} | {plate.FirstDigitSection}";
 
-                dgv_Plates.Rows.Add(combinedSection, plate.PersonName, plate.IssueDate.ToPersianDate(), plate.ExpiryDate.ToPersianDate(), plate.CreatedAt.ToPersianDate());
+                dgv_Plates.Rows.Add(plate.Id, combinedSection, plate.PersonName, plate.IssueDate.ToPersianDate(), plate.ExpiryDate.ToPersianDate(), plate.CreatedAt.ToPersianDate(), plate.PersonId);
             }
         }
 
@@ -241,12 +248,12 @@ namespace Pilak
                 (string.IsNullOrEmpty(txt_CityCode.Text) || txt_CityCode.Text.Length != 2) ||
                 string.IsNullOrEmpty(cmb_PlatePerson.Text))
             {
-                MessageBox.Show("لطفا اطلاعات را به درستی وارد کنید.", "اطلاعات نامعتبر", MessageBoxButtons.OK,
+                MessageBox.Show(@"لطفا اطلاعات را به درستی وارد کنید.", @"اطلاعات نامعتبر", MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
 
-            var newPlate = new License()
+            var newPlate = new License
             {
                 Id = Guid.NewGuid(),
                 FirstDigitSection = int.Parse(txt_PlateFirstDigit.Text),
@@ -260,8 +267,76 @@ namespace Pilak
                 UpdatedAt = DateTime.Now
             };
 
+            if (editPlate)
+            {
+                if (EditPlateModel != null)
+                {
+                    newPlate.Id = EditPlateModel.Id;
+                    newPlate.CreatedAt = EditPlateModel.CreatedAt;
+
+                    ClearPlateFields();
+
+                    btn_CancelPlateEdit.Visible = false;
+                    btn_EditPlate.Visible = true;
+                    editPlate = false;
+
+                    await _license.Update(newPlate);
+                    await LoadPlates();
+
+                    return;
+                }
+            }
+
             await _license.Add(newPlate);
             await LoadPlates();
+
+            ClearPlateFields();
+        }
+
+        private async void btn_EditPlate_Click(object sender, EventArgs e)
+        {
+            var selectedPlate = dgv_Plates.SelectedRows[0];
+
+            if (selectedPlate == null) return;
+
+            var id = selectedPlate.Cells["col_plate_Id"].Value;
+            if (id == null) return;
+
+            var plate = await _license.Get(Guid.Parse(selectedPlate.Cells["col_plate_Id"].Value.ToString()!));
+            if (plate == null) return;
+
+            btn_CancelPlateEdit.Visible = true;
+            btn_EditPlate.Visible = false;
+            editPlate = true;
+            EditPlateModel = plate;
+
+            cmb_PlatePerson.SelectedItem = plate.PersonId;
+            txt_PlateFirstDigit.Text = plate.FirstDigitSection.ToString();
+            cmb_PlateLetter.SelectedItem = LetterMapper.GetLetter(plate.LetterSection!);
+            txt_PlateSecondDigit.Text = plate.SecondDigitSection.ToString();
+            txt_CityCode.Text = plate.CityCode.ToString();
+            dtp_IssueDate.Value = plate.IssueDate;
+            dtp_ExpiryDate.Value = plate.ExpiryDate;
+        }
+
+        private void btn_CancelPlateEdit_Click(object sender, EventArgs e)
+        {
+            ClearPlateFields();
+
+            btn_CancelPlateEdit.Visible = false;
+            btn_EditPlate.Visible = true;
+            editPlate = false;
+        }
+
+        private void ClearPlateFields()
+        {
+            cmb_PlatePerson.SelectedItem = string.Empty;
+            txt_PlateFirstDigit.Text = string.Empty;
+            cmb_PlateLetter.SelectedItem = string.Empty;
+            txt_PlateSecondDigit.Text = string.Empty;
+            txt_CityCode.Text = string.Empty;
+            dtp_IssueDate.Value = DateTime.Now;
+            dtp_ExpiryDate.Value = DateTime.Now;
         }
 
         private void txt_PlateFirstDigit_KeyPress(object sender, KeyPressEventArgs e)
@@ -289,6 +364,7 @@ namespace Pilak
         }
         #endregion
 
+        #region Registered Persons
         private async Task LoadPersons()
         {
             var persons = await _person.Get();
@@ -350,6 +426,15 @@ namespace Pilak
                 MessageBox.Show(ex.Message, "خطایی رخ داد", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btn_PersonInfo_Click(object sender, EventArgs e)
+        {
+            using var scope = _serviceProvider.CreateScope();
+
+            var form = scope.ServiceProvider.GetRequiredService<FormPersonInfo>();
+            form.ShowDialog();
+        }
+        #endregion
 
         #region Detection
         private static void RunPredictor(string command)
