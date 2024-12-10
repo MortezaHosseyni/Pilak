@@ -23,7 +23,7 @@ namespace Pilak.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CityCode")
+                    b.Property<int>("cityCode")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
@@ -32,13 +32,13 @@ namespace Pilak.Migrations
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("FirstDigitSection")
+                    b.Property<int>("firstDigitSection")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("IssueDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("LetterSection")
+                    b.Property<string>("letterSection")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
@@ -46,7 +46,7 @@ namespace Pilak.Migrations
                     b.Property<Guid>("PersonId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SecondDigitSection")
+                    b.Property<int>("secondDigitSection")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("UpdatedAt")

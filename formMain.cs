@@ -4,14 +4,19 @@ using System.Globalization;
 using Pilak.Database;
 using Pilak.Database.Entities;
 using Pilak.Utilities;
-using Pilak.ML;
+using System.Diagnostics;
+using Pilak.Models;
+using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Pilak
 {
     public partial class FormMain : Form
     {
-        private readonly LicenseRepository _license = new LicenseRepository(new ApplicationDbContext());
-        private readonly PersonRepository _person = new PersonRepository(new ApplicationDbContext());
+        private readonly IServiceProvider _serviceProvider;
+
+        private readonly ILicenseRepository _license;
+        private readonly IPersonRepository _person;
 
         private readonly PersianCalendar _pc = new PersianCalendar();
         private FilterInfoCollection videoDevices;
@@ -21,9 +26,16 @@ namespace Pilak
 
         private Image? selectedPersonImage;
 
-        public FormMain()
+        public FormMain(IServiceProvider serviceProvider, ILicenseRepository license, IPersonRepository person, FilterInfoCollection videoDevices, VideoCaptureDevice videoSource)
         {
             InitializeComponent();
+
+            _serviceProvider = serviceProvider;
+
+            _license = license;
+            _person = person;
+            this.videoDevices = videoDevices;
+            this.videoSource = videoSource;
         }
 
         private async void FormMain_Load(object sender, EventArgs e)
@@ -50,16 +62,17 @@ namespace Pilak
         }
 
         #region Image Detection
-        private void btn_SelectPlateImage_Click(object sender, EventArgs e)
+        private async void btn_SelectPlateImage_Click(object sender, EventArgs e)
         {
             var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files (*.png;*.jpg)|*.png;*.jpg";
-            openFileDialog.Title = "عکس پلاک را انتخاب کنید";
+            openFileDialog.Filter = @"Image Files (*.png;*.jpg)|*.png;*.jpg";
+            openFileDialog.Title = @"عکس پلاک را انتخاب کنید";
 
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
 
             var selectedImagePath = openFileDialog.FileName;
 
+            img_PlateContent.Visible = false;
             img_PlateImage.Image = Image.FromFile(selectedImagePath);
             img_PlateImage.SizeMode = PictureBoxSizeMode.StretchImage;
 
@@ -67,7 +80,67 @@ namespace Pilak
                 $"{_pc.GetYear(DateTime.Now)}/{_pc.GetMonth(DateTime.Now)}/{_pc.GetDayOfMonth(DateTime.Now)} {DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}";
             rtb_PlateDetectionLog.Text += $"[{now}] تصویر پلاک انتخاب شد.\n";
 
-            // TODO: Detect plate using model.
+            btn_SelectPlateImage.Enabled = false;
+
+            const string pythonScript = "pilak.py";
+            const string bestContentModel = "best_content.pt";
+            const string bestEnvModel = "best_env.pt";
+            const string output = "predictor/output.json";
+
+            var command = $"{pythonScript} {bestContentModel} {bestEnvModel} \"{selectedImagePath.Replace("\\", "/")}\"";
+            RunPredictor(command);
+
+            await Task.Delay(300);
+
+            btn_SelectPlateImage.Enabled = true;
+
+            if (!File.Exists(output))
+            {
+                MessageBox.Show(@"هنگام پردازش تصویر خطایی رخ داد.", @"پردازش تصویر", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            var jsonOutput = await File.ReadAllTextAsync(output);
+            var result = JsonSerializer.Deserialize<PlateDetectionResult>(jsonOutput);
+            if (result == null)
+            {
+                MessageBox.Show(@"هنگام پردازش تصویر خطایی رخ داد.", @"پردازش تصویر", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+            
+            img_PlateImage.Image = Image.FromFile($"predictor\\{result.plateImage}\\image0.jpg");
+
+            img_PlateContent.Visible = true;
+            img_PlateContent.Image = Image.FromFile($"predictor\\{result.plateContentImage}\\image0.jpg");
+
+            result.letterSection = LetterMapper.GetCode(result.letterSection);
+
+            var searchLicense = await _license.Get(result);
+            if (searchLicense == null)
+            {
+                var createPlate = MessageBox.Show("پلاکی با این مشخصات در سیستم ثبت نشده است!\nمی‌خواهید این پلاک را ثبت کنید؟", @"ثبت پلاک", MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (createPlate != DialogResult.Yes) return;
+
+                txt_PlateFirstDigit.Text = result.firstDigitSection;
+                cmb_PlateLetter.SelectedItem = result.letterSection;
+                txt_PlateSecondDigit.Text = result.secondDigitSection;
+                txt_CityCode.Text = result.cityCode;
+                tab_MainTab.SelectedTab = tab_MainTab.TabPages["tbp_RegisteredPlates"];
+
+                return;
+            }
+
+            using var scope = _serviceProvider.CreateScope();
+
+            var form = scope.ServiceProvider.GetRequiredService<FormPersonInfo>();
+            form.LicensePlate =
+                $"{searchLicense.CityCode} | {searchLicense.SecondDigitSection} | {LetterMapper.GetLetter(searchLicense.LetterSection ?? string.Empty)} | {searchLicense.FirstDigitSection}";
+            form.PersonInfo = searchLicense.Person;
+            form.ShowDialog();
         }
         #endregion
 
@@ -277,5 +350,34 @@ namespace Pilak
                 MessageBox.Show(ex.Message, "خطایی رخ داد", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        #region Detection
+        private static void RunPredictor(string command)
+        {
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "python",
+                    Arguments = command,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WorkingDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/predictor"
+                };
+
+                using var process = Process.Start(psi);
+                if (process == null)
+                    throw new Exception("Failed to start process.");
+
+                process.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(@$"Error running Python command: {ex.Message}", @"ERROR!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
     }
 }
