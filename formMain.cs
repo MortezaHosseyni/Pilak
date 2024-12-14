@@ -8,6 +8,8 @@ using System.Diagnostics;
 using Pilak.Models;
 using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.WebSockets;
+using System.Text;
 
 namespace Pilak
 {
@@ -31,8 +33,13 @@ namespace Pilak
 
         private Image? selectedPersonImage;
 
+        private const string LivePredict = "ws://127.0.0.1:8000/predict/live";
+        private const string Predict = "http://127.0.0.1:8000/predict";
+
+        private ClientWebSocket _webSocket;
+
         #region Form
-        public FormMain(IServiceProvider serviceProvider, ILicenseRepository license, IPersonRepository person, FilterInfoCollection videoDevices, VideoCaptureDevice videoSource)
+        public FormMain(IServiceProvider serviceProvider, ILicenseRepository license, IPersonRepository person, FilterInfoCollection videoDevices, VideoCaptureDevice videoSource, ClientWebSocket webSocket)
         {
             InitializeComponent();
 
@@ -42,6 +49,8 @@ namespace Pilak
             _person = person;
             this.videoDevices = videoDevices;
             this.videoSource = videoSource;
+
+            _webSocket = webSocket;
         }
 
         private async void FormMain_Load(object sender, EventArgs e)
@@ -89,40 +98,42 @@ namespace Pilak
 
             btn_SelectPlateImage.Enabled = false;
 
-            const string pythonScript = "pilak.py";
-            const string bestContentModel = "best_content.pt";
-            const string bestEnvModel = "best_env.pt";
-            const string output = "predictor/output.json";
-
-            var command = $"{pythonScript} {bestContentModel} {bestEnvModel} \"{selectedImagePath.Replace("\\", "/")}\"";
-            RunPredictor(command);
+            //var command = "fastapi dev";
+            //RunPredictor(command);
 
             await Task.Delay(300);
 
-            btn_SelectPlateImage.Enabled = true;
+            var result = await Detect(selectedImagePath);
 
-            if (!File.Exists(output))
+            var image = Image.FromFile($"predictor\\{result.plateImage}");
+            img_PlateImage.Image = image;
+            img_PersonImage.Paint += (s, e) =>
             {
-                MessageBox.Show(@"هنگام پردازش تصویر خطایی رخ داد.", @"پردازش تصویر", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                return;
-            }
+                e.Graphics.Clear(img_PersonImage.BackColor);
 
-            var jsonOutput = await File.ReadAllTextAsync(output);
-            var result = JsonSerializer.Deserialize<PlateDetectionResult>(jsonOutput);
-            if (result == null)
-            {
-                MessageBox.Show(@"هنگام پردازش تصویر خطایی رخ داد.", @"پردازش تصویر", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                return;
-            }
+                // Calculate scaling to fit within PictureBox without distortion
+                float scaleX = (float)img_PersonImage.Width / image.Width;
+                float scaleY = (float)img_PersonImage.Height / image.Height;
+                float scale = Math.Min(scaleX, scaleY); // Maintain aspect ratio
 
-            img_PlateImage.Image = Image.FromFile($"predictor\\{result.plateImage}\\image0.jpg");
+                // Calculate the new dimensions of the image
+                int newWidth = (int)(image.Width * scale);
+                int newHeight = (int)(image.Height * scale);
+
+                // Center the image inside the PictureBox
+                int posX = (img_PersonImage.Width - newWidth) / 2;
+                int posY = (img_PersonImage.Height - newHeight) / 2;
+
+                // Draw the image with scaling
+                e.Graphics.DrawImage(image, posX, posY, newWidth, newHeight);
+            };
+            img_PersonImage.SizeMode = PictureBoxSizeMode.Normal;
+            img_PersonImage.Invalidate();
 
             img_PlateContent.Visible = true;
-            img_PlateContent.Image = Image.FromFile($"predictor\\{result.plateContentImage}\\image0.jpg");
+            img_PlateContent.Image = Image.FromFile($"predictor\\{result.plateContentImage}");
 
-            result.letterSection = LetterMapper.GetCode(result.letterSection);
+            result.letterSection = result.letterSection.ToUpper();
 
             var searchLicense = await _license.Get(result);
             if (searchLicense == null)
@@ -133,7 +144,7 @@ namespace Pilak
                 if (createPlate != DialogResult.Yes) return;
 
                 txt_PlateFirstDigit.Text = result.firstDigitSection;
-                cmb_PlateLetter.SelectedItem = LetterMapper.GetLetter(result.letterSection);
+                cmb_PlateLetter.SelectedItem = LetterMapper.GetLetter(result.letterSection.ToUpper());
                 txt_PlateSecondDigit.Text = result.secondDigitSection;
                 txt_CityCode.Text = result.cityCode;
                 tab_MainTab.SelectedTab = tab_MainTab.TabPages["tbp_RegisteredPlates"];
@@ -173,7 +184,7 @@ namespace Pilak
             DetectCameras();
         }
 
-        private void btn_StartCamera_Click(object sender, EventArgs e)
+        private async void btn_StartCamera_Click(object sender, EventArgs e)
         {
             var now =
                 $"{_pc.GetYear(DateTime.Now)}/{_pc.GetMonth(DateTime.Now)}/{_pc.GetDayOfMonth(DateTime.Now)} {DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}";
@@ -183,7 +194,10 @@ namespace Pilak
                 if (videoDevices.Count > 0)
                 {
                     videoSource = new VideoCaptureDevice(videoDevices[cmb_Cameras.SelectedIndex].MonikerString);
-                    videoSource.NewFrame += new NewFrameEventHandler(video_NewFrame);
+                    videoSource.NewFrame += (sender, eventArgs) =>
+                    {
+                        _ = Video_NewFrame(sender, eventArgs);
+                    };
                     videoSource.Start();
                 }
                 else
@@ -195,7 +209,9 @@ namespace Pilak
                 cmb_Cameras.Enabled = false;
                 isCameraOn = true;
 
-                rtb_RealTimeDetectionLog.Text += $"[{now}] دوربین {videoDevices[cmb_Cameras.SelectedIndex].Name} فعال شد.\n";
+                await ConnectWebSocketAsync();
+
+                AppendText($"[{now}] دوربین {videoDevices[cmb_Cameras.SelectedIndex].Name} فعال شد.\n");
             }
             else
             {
@@ -208,20 +224,106 @@ namespace Pilak
                 cmb_Cameras.Enabled = true;
                 isCameraOn = false;
 
-                rtb_RealTimeDetectionLog.Text += $"[{now}] دوربین {videoDevices[cmb_Cameras.SelectedIndex].Name} غیرفعال شد.\n";
+                await DisconnectWebSocketAsync();
+
+                AppendText($"[{now}] دوربین {videoDevices[cmb_Cameras.SelectedIndex].Name} غیرفعال شد.\n");
             }
         }
 
-        private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        private async Task Video_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             var bitmap = (Bitmap)eventArgs.Frame.Clone();
             img_Camera.Image = bitmap;
+
+            using var memoryStream = new MemoryStream();
+            
+            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            byte[] frameBytes = memoryStream.ToArray();
+
+            await SendFrameToWebSocket(frameBytes);
         }
 
-        private void tbp_DetectRealtime_Click(object sender, EventArgs e)
+        private async Task ConnectWebSocketAsync()
         {
-
+            try
+            {
+                await _webSocket!.ConnectAsync(new Uri(LivePredict), CancellationToken.None);
+                AppendText("WebSocket connected.\n");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to connect to WebSocket: {ex.Message}", "WebSocket Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+        private async Task SendFrameToWebSocket(byte[] frameBytes)
+        {
+            if (_webSocket!.State == WebSocketState.Open)
+            {
+                try
+                {
+                    await _webSocket.SendAsync(new ArraySegment<byte>(frameBytes), WebSocketMessageType.Binary, true, CancellationToken.None);
+                    AppendText($"Frame sent to WebSocket at {DateTime.Now}\n");
+
+                    await ReceiveResponse();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to send frame: {ex.Message}", "WebSocket Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                AppendText("WebSocket is not connected.\n");
+            }
+        }
+
+        private async Task ReceiveResponse()
+        {
+            try
+            {
+                var buffer = new byte[1024 * 4];
+                var result = await _webSocket!.ReceiveAsync(
+                    new ArraySegment<byte>(buffer),
+                    CancellationToken.None
+                );
+
+                string response = Encoding.UTF8.GetString(buffer, 0, result.Count);
+
+                AppendText(response);
+
+                if (result.MessageType == WebSocketMessageType.Close)
+                {
+                    await _webSocket.CloseAsync(
+                        WebSocketCloseStatus.NormalClosure,
+                        string.Empty,
+                        CancellationToken.None
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                AppendText(ex.Message);
+            }
+        }
+
+        private async Task DisconnectWebSocketAsync()
+        {
+            if (_webSocket?.State == WebSocketState.Open)
+            {
+                await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
+                rtb_RealTimeDetectionLog.Text += "WebSocket disconnected.\n";
+            }
+        }
+
+        private void AppendText(string text)
+        {
+            if (rtb_RealTimeDetectionLog.InvokeRequired)
+                rtb_RealTimeDetectionLog.Invoke(new Action(() => rtb_RealTimeDetectionLog.AppendText(text)));
+            else
+                rtb_RealTimeDetectionLog.AppendText(text);
+        }
+
         #endregion
 
         #region Registered Plates
@@ -443,24 +545,88 @@ namespace Pilak
             {
                 var psi = new ProcessStartInfo
                 {
-                    FileName = "python",
+                    FileName = "cmd",
                     Arguments = command,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
-                    CreateNoWindow = true,
+                    CreateNoWindow = false,
                     WorkingDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}/predictor"
                 };
 
-                using var process = Process.Start(psi);
-                if (process == null)
-                    throw new Exception("Failed to start process.");
-
-                process.WaitForExit();
+                using var process = Process.Start(psi) ?? throw new Exception("Failed to start process.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(@$"Error running Python command: {ex.Message}", @"ERROR!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public async Task<PlateDetectionResult> Detect(string imagePath)
+        {
+            try
+            {
+                var payload = new
+                {
+                    image_path = imagePath
+                };
+
+                string jsonPayload = JsonSerializer.Serialize(payload);
+
+                var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                var client = new HttpClient();
+
+                HttpResponseMessage response = await client.PostAsync(Predict, content);
+
+                response.EnsureSuccessStatusCode();
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var plateInfo = JsonSerializer.Deserialize<PlateDetectionResult>(responseContent);
+
+                if (plateInfo == null)
+                {
+                    MessageBox.Show("هنگام پردازش تصویر خطایی رخ داد", "خطا!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    throw new Exception();
+                }
+
+                return plateInfo;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task DetectRealtime(string imagePath)
+        {
+            using var webSocket = new ClientWebSocket();
+            
+            try
+            {
+                await webSocket.ConnectAsync(new Uri(LivePredict), CancellationToken.None);
+
+                var messageBuffer = Encoding.UTF8.GetBytes(imagePath);
+                await webSocket.SendAsync(new ArraySegment<byte>(messageBuffer), WebSocketMessageType.Text, true, CancellationToken.None);
+
+                var receiveBuffer = new byte[8192];
+                var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
+                var imageData = new byte[result.Count];
+                Array.Copy(receiveBuffer, imageData, result.Count);
+
+                using (var ms = new MemoryStream(imageData))
+                {
+                    Image image = Image.FromStream(ms);
+                    img_Camera.Invoke(new Action(() => img_Camera.Image = image));
+                }
+
+                await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new Exception(ex.Message);
             }
         }
         #endregion

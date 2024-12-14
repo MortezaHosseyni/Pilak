@@ -1,6 +1,7 @@
 using AForge.Video.DirectShow;
 using Microsoft.Extensions.DependencyInjection;
 using Pilak.Database;
+using System.Net.WebSockets;
 
 namespace Pilak
 {
@@ -37,6 +38,8 @@ namespace Pilak
 
             services.AddScoped(provider => new FilterInfoCollection(FilterCategory.VideoInputDevice));
             services.AddScoped<VideoCaptureDevice>();
+
+            services.AddTransient<ClientWebSocket>();
         }
     }
 }

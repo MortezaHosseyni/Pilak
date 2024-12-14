@@ -140,11 +140,11 @@
             // tbp_DetectByPicture
             // 
             tbp_DetectByPicture.Controls.Add(pnl_PlateDetection);
-            tbp_DetectByPicture.Location = new Point(4, 27);
+            tbp_DetectByPicture.Location = new Point(4, 31);
             tbp_DetectByPicture.Margin = new Padding(3, 4, 3, 4);
             tbp_DetectByPicture.Name = "tbp_DetectByPicture";
             tbp_DetectByPicture.Padding = new Padding(3, 4, 3, 4);
-            tbp_DetectByPicture.Size = new Size(974, 672);
+            tbp_DetectByPicture.Size = new Size(974, 668);
             tbp_DetectByPicture.TabIndex = 0;
             tbp_DetectByPicture.Text = "شناسایی با عکس";
             tbp_DetectByPicture.UseVisualStyleBackColor = true;
@@ -166,7 +166,7 @@
             // 
             img_PlateContent.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             img_PlateContent.BorderStyle = BorderStyle.FixedSingle;
-            img_PlateContent.Location = new Point(7, 419);
+            img_PlateContent.Location = new Point(9, 421);
             img_PlateContent.Name = "img_PlateContent";
             img_PlateContent.Size = new Size(211, 55);
             img_PlateContent.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -177,11 +177,11 @@
             // rtb_PlateDetectionLog
             // 
             rtb_PlateDetectionLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            rtb_PlateDetectionLog.Location = new Point(3, 536);
+            rtb_PlateDetectionLog.Location = new Point(3, 555);
             rtb_PlateDetectionLog.Name = "rtb_PlateDetectionLog";
             rtb_PlateDetectionLog.ReadOnly = true;
             rtb_PlateDetectionLog.RightToLeft = RightToLeft.Yes;
-            rtb_PlateDetectionLog.Size = new Size(956, 116);
+            rtb_PlateDetectionLog.Size = new Size(956, 97);
             rtb_PlateDetectionLog.TabIndex = 2;
             rtb_PlateDetectionLog.Text = "";
             // 
@@ -200,12 +200,13 @@
             // img_PlateImage
             // 
             img_PlateImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            img_PlateImage.BackgroundImageLayout = ImageLayout.Center;
             img_PlateImage.BorderStyle = BorderStyle.FixedSingle;
             img_PlateImage.Image = Properties.Resources.Default_Pilak;
-            img_PlateImage.Location = new Point(3, 4);
+            img_PlateImage.Location = new Point(9, 4);
             img_PlateImage.Margin = new Padding(3, 4, 3, 4);
             img_PlateImage.Name = "img_PlateImage";
-            img_PlateImage.Size = new Size(956, 474);
+            img_PlateImage.Size = new Size(950, 474);
             img_PlateImage.SizeMode = PictureBoxSizeMode.CenterImage;
             img_PlateImage.TabIndex = 0;
             img_PlateImage.TabStop = false;
@@ -213,15 +214,14 @@
             // tbp_DetectRealtime
             // 
             tbp_DetectRealtime.Controls.Add(pnl_RealTimeDetection);
-            tbp_DetectRealtime.Location = new Point(4, 27);
+            tbp_DetectRealtime.Location = new Point(4, 29);
             tbp_DetectRealtime.Margin = new Padding(3, 4, 3, 4);
             tbp_DetectRealtime.Name = "tbp_DetectRealtime";
             tbp_DetectRealtime.Padding = new Padding(3, 4, 3, 4);
-            tbp_DetectRealtime.Size = new Size(974, 672);
+            tbp_DetectRealtime.Size = new Size(974, 670);
             tbp_DetectRealtime.TabIndex = 1;
             tbp_DetectRealtime.Text = "شناسایی همزمان";
             tbp_DetectRealtime.UseVisualStyleBackColor = true;
-            tbp_DetectRealtime.Click += tbp_DetectRealtime_Click;
             // 
             // pnl_RealTimeDetection
             // 
@@ -234,13 +234,13 @@
             pnl_RealTimeDetection.Controls.Add(img_Camera);
             pnl_RealTimeDetection.Location = new Point(6, 7);
             pnl_RealTimeDetection.Name = "pnl_RealTimeDetection";
-            pnl_RealTimeDetection.Size = new Size(962, 637);
+            pnl_RealTimeDetection.Size = new Size(962, 633);
             pnl_RealTimeDetection.TabIndex = 1;
             // 
             // btn_StartCamera
             // 
             btn_StartCamera.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btn_StartCamera.Location = new Point(3, 456);
+            btn_StartCamera.Location = new Point(3, 452);
             btn_StartCamera.Name = "btn_StartCamera";
             btn_StartCamera.Size = new Size(956, 27);
             btn_StartCamera.TabIndex = 5;
@@ -251,7 +251,7 @@
             // btn_RefreshCameras
             // 
             btn_RefreshCameras.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btn_RefreshCameras.Location = new Point(929, 424);
+            btn_RefreshCameras.Location = new Point(929, 420);
             btn_RefreshCameras.Name = "btn_RefreshCameras";
             btn_RefreshCameras.Size = new Size(30, 26);
             btn_RefreshCameras.TabIndex = 4;
@@ -263,15 +263,15 @@
             // 
             cmb_Cameras.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             cmb_Cameras.FormattingEnabled = true;
-            cmb_Cameras.Location = new Point(3, 424);
+            cmb_Cameras.Location = new Point(3, 420);
             cmb_Cameras.Name = "cmb_Cameras";
-            cmb_Cameras.Size = new Size(920, 26);
+            cmb_Cameras.Size = new Size(920, 30);
             cmb_Cameras.TabIndex = 3;
             // 
             // rtb_RealTimeDetectionLog
             // 
             rtb_RealTimeDetectionLog.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            rtb_RealTimeDetectionLog.Location = new Point(3, 522);
+            rtb_RealTimeDetectionLog.Location = new Point(3, 518);
             rtb_RealTimeDetectionLog.Name = "rtb_RealTimeDetectionLog";
             rtb_RealTimeDetectionLog.ReadOnly = true;
             rtb_RealTimeDetectionLog.RightToLeft = RightToLeft.Yes;
@@ -282,7 +282,7 @@
             // btn_RealTimeDetect
             // 
             btn_RealTimeDetect.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btn_RealTimeDetect.Location = new Point(3, 489);
+            btn_RealTimeDetect.Location = new Point(3, 485);
             btn_RealTimeDetect.Name = "btn_RealTimeDetect";
             btn_RealTimeDetect.Size = new Size(956, 27);
             btn_RealTimeDetect.TabIndex = 1;
@@ -295,7 +295,7 @@
             img_Camera.BorderStyle = BorderStyle.FixedSingle;
             img_Camera.Location = new Point(3, 4);
             img_Camera.Name = "img_Camera";
-            img_Camera.Size = new Size(956, 414);
+            img_Camera.Size = new Size(956, 410);
             img_Camera.TabIndex = 0;
             img_Camera.TabStop = false;
             // 
@@ -303,10 +303,10 @@
             // 
             tbp_RegisteredPlates.Controls.Add(pnl_AddPlate);
             tbp_RegisteredPlates.Controls.Add(dgv_Plates);
-            tbp_RegisteredPlates.Location = new Point(4, 24);
+            tbp_RegisteredPlates.Location = new Point(4, 29);
             tbp_RegisteredPlates.Margin = new Padding(3, 4, 3, 4);
             tbp_RegisteredPlates.Name = "tbp_RegisteredPlates";
-            tbp_RegisteredPlates.Size = new Size(974, 675);
+            tbp_RegisteredPlates.Size = new Size(974, 670);
             tbp_RegisteredPlates.TabIndex = 2;
             tbp_RegisteredPlates.Text = "پلاک‌های ثبت شده";
             tbp_RegisteredPlates.UseVisualStyleBackColor = true;
@@ -325,7 +325,7 @@
             pnl_AddPlate.Controls.Add(txt_PlateSecondDigit);
             pnl_AddPlate.Controls.Add(cmb_PlateLetter);
             pnl_AddPlate.Controls.Add(txt_PlateFirstDigit);
-            pnl_AddPlate.Location = new Point(3, 496);
+            pnl_AddPlate.Location = new Point(3, 494);
             pnl_AddPlate.Name = "pnl_AddPlate";
             pnl_AddPlate.Size = new Size(968, 152);
             pnl_AddPlate.TabIndex = 1;
@@ -334,9 +334,9 @@
             // 
             btn_CancelPlateEdit.Anchor = AnchorStyles.Bottom;
             btn_CancelPlateEdit.BackColor = Color.FromArgb(255, 255, 192);
-            btn_CancelPlateEdit.Location = new Point(613, 118);
+            btn_CancelPlateEdit.Location = new Point(613, 116);
             btn_CancelPlateEdit.Name = "btn_CancelPlateEdit";
-            btn_CancelPlateEdit.Size = new Size(51, 23);
+            btn_CancelPlateEdit.Size = new Size(64, 33);
             btn_CancelPlateEdit.TabIndex = 10;
             btn_CancelPlateEdit.Text = "انصراف";
             btn_CancelPlateEdit.UseVisualStyleBackColor = false;
@@ -349,7 +349,7 @@
             lbl_ExpiryDate.AutoSize = true;
             lbl_ExpiryDate.Location = new Point(436, 91);
             lbl_ExpiryDate.Name = "lbl_ExpiryDate";
-            lbl_ExpiryDate.Size = new Size(39, 18);
+            lbl_ExpiryDate.Size = new Size(49, 22);
             lbl_ExpiryDate.TabIndex = 9;
             lbl_ExpiryDate.Text = "انقضاء";
             // 
@@ -357,9 +357,9 @@
             // 
             lbl_IssueDate.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             lbl_IssueDate.AutoSize = true;
-            lbl_IssueDate.Location = new Point(573, 91);
+            lbl_IssueDate.Location = new Point(578, 91);
             lbl_IssueDate.Name = "lbl_IssueDate";
-            lbl_IssueDate.Size = new Size(34, 18);
+            lbl_IssueDate.Size = new Size(44, 22);
             lbl_IssueDate.TabIndex = 8;
             lbl_IssueDate.Text = "صدور";
             // 
@@ -369,16 +369,16 @@
             dtp_ExpiryDate.Format = DateTimePickerFormat.Short;
             dtp_ExpiryDate.Location = new Point(345, 86);
             dtp_ExpiryDate.Name = "dtp_ExpiryDate";
-            dtp_ExpiryDate.Size = new Size(85, 25);
+            dtp_ExpiryDate.Size = new Size(85, 30);
             dtp_ExpiryDate.TabIndex = 7;
             // 
             // dtp_IssueDate
             // 
             dtp_IssueDate.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             dtp_IssueDate.Format = DateTimePickerFormat.Short;
-            dtp_IssueDate.Location = new Point(481, 86);
+            dtp_IssueDate.Location = new Point(486, 86);
             dtp_IssueDate.Name = "dtp_IssueDate";
-            dtp_IssueDate.Size = new Size(86, 25);
+            dtp_IssueDate.Size = new Size(86, 30);
             dtp_IssueDate.TabIndex = 6;
             // 
             // cmb_PlatePerson
@@ -387,7 +387,7 @@
             cmb_PlatePerson.FormattingEnabled = true;
             cmb_PlatePerson.Location = new Point(345, 21);
             cmb_PlatePerson.Name = "cmb_PlatePerson";
-            cmb_PlatePerson.Size = new Size(262, 26);
+            cmb_PlatePerson.Size = new Size(262, 30);
             cmb_PlatePerson.TabIndex = 5;
             // 
             // btn_AddPlate
@@ -395,7 +395,7 @@
             btn_AddPlate.Anchor = AnchorStyles.Bottom;
             btn_AddPlate.Location = new Point(345, 117);
             btn_AddPlate.Name = "btn_AddPlate";
-            btn_AddPlate.Size = new Size(262, 24);
+            btn_AddPlate.Size = new Size(262, 32);
             btn_AddPlate.TabIndex = 4;
             btn_AddPlate.Text = "ثبت پلاک";
             btn_AddPlate.UseVisualStyleBackColor = true;
@@ -407,7 +407,7 @@
             txt_CityCode.Location = new Point(555, 54);
             txt_CityCode.MaxLength = 2;
             txt_CityCode.Name = "txt_CityCode";
-            txt_CityCode.Size = new Size(52, 25);
+            txt_CityCode.Size = new Size(52, 30);
             txt_CityCode.TabIndex = 3;
             txt_CityCode.KeyPress += txt_CityCode_KeyPress;
             // 
@@ -417,7 +417,7 @@
             txt_PlateSecondDigit.Location = new Point(453, 54);
             txt_PlateSecondDigit.MaxLength = 3;
             txt_PlateSecondDigit.Name = "txt_PlateSecondDigit";
-            txt_PlateSecondDigit.Size = new Size(96, 25);
+            txt_PlateSecondDigit.Size = new Size(96, 30);
             txt_PlateSecondDigit.TabIndex = 2;
             txt_PlateSecondDigit.KeyPress += txt_PlateSecondDigit_KeyPress;
             // 
@@ -428,7 +428,7 @@
             cmb_PlateLetter.Items.AddRange(new object[] { "الف", "ب", "پ", "ت", "ث", "ج", "چ", "ح", "خ", "د", "ذ", "ر", "ز", "ژ", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ک", "گ", "ل", "م", "ن", "و", "ه", "ی" });
             cmb_PlateLetter.Location = new Point(401, 53);
             cmb_PlateLetter.Name = "cmb_PlateLetter";
-            cmb_PlateLetter.Size = new Size(46, 26);
+            cmb_PlateLetter.Size = new Size(46, 30);
             cmb_PlateLetter.TabIndex = 1;
             // 
             // txt_PlateFirstDigit
@@ -437,7 +437,7 @@
             txt_PlateFirstDigit.Location = new Point(345, 53);
             txt_PlateFirstDigit.MaxLength = 2;
             txt_PlateFirstDigit.Name = "txt_PlateFirstDigit";
-            txt_PlateFirstDigit.Size = new Size(50, 25);
+            txt_PlateFirstDigit.Size = new Size(50, 30);
             txt_PlateFirstDigit.TabIndex = 0;
             txt_PlateFirstDigit.KeyPress += txt_PlateFirstDigit_KeyPress;
             // 
@@ -454,68 +454,79 @@
             dgv_Plates.MultiSelect = false;
             dgv_Plates.Name = "dgv_Plates";
             dgv_Plates.RightToLeft = RightToLeft.Yes;
-            dgv_Plates.Size = new Size(968, 487);
+            dgv_Plates.RowHeadersWidth = 51;
+            dgv_Plates.Size = new Size(968, 485);
             dgv_Plates.TabIndex = 0;
             // 
             // col_plate_Id
             // 
             col_plate_Id.HeaderText = "Id";
+            col_plate_Id.MinimumWidth = 6;
             col_plate_Id.Name = "col_plate_Id";
             col_plate_Id.Visible = false;
+            col_plate_Id.Width = 125;
             // 
             // col_plate_Plate
             // 
             col_plate_Plate.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_plate_Plate.HeaderText = "مشخصات پلاک";
+            col_plate_Plate.MinimumWidth = 6;
             col_plate_Plate.Name = "col_plate_Plate";
             // 
             // col_plate_Person
             // 
             col_plate_Person.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_plate_Person.HeaderText = "به نام";
+            col_plate_Person.MinimumWidth = 6;
             col_plate_Person.Name = "col_plate_Person";
             // 
             // col_plate_IssuedDate
             // 
             col_plate_IssuedDate.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_plate_IssuedDate.HeaderText = "تاریخ صدور";
+            col_plate_IssuedDate.MinimumWidth = 6;
             col_plate_IssuedDate.Name = "col_plate_IssuedDate";
             // 
             // col_plate_ExpiryDate
             // 
             col_plate_ExpiryDate.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_plate_ExpiryDate.HeaderText = "تاریخ انقضاء";
+            col_plate_ExpiryDate.MinimumWidth = 6;
             col_plate_ExpiryDate.Name = "col_plate_ExpiryDate";
             // 
             // col_plate_CreatedAt
             // 
             col_plate_CreatedAt.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_plate_CreatedAt.HeaderText = "تاریخ ثبت در سیستم";
+            col_plate_CreatedAt.MinimumWidth = 6;
             col_plate_CreatedAt.Name = "col_plate_CreatedAt";
             // 
             // col_plate_PersonId
             // 
             col_plate_PersonId.HeaderText = "PersonId";
+            col_plate_PersonId.MinimumWidth = 6;
             col_plate_PersonId.Name = "col_plate_PersonId";
             col_plate_PersonId.Visible = false;
+            col_plate_PersonId.Width = 125;
             // 
             // cms_PlatesTable
             // 
+            cms_PlatesTable.ImageScalingSize = new Size(20, 20);
             cms_PlatesTable.Items.AddRange(new ToolStripItem[] { btn_DeletePlate, btn_EditPlate });
             cms_PlatesTable.Name = "cms_PlatesTable";
-            cms_PlatesTable.Size = new Size(111, 48);
+            cms_PlatesTable.Size = new Size(125, 52);
             // 
             // btn_DeletePlate
             // 
             btn_DeletePlate.BackColor = Color.FromArgb(255, 192, 192);
             btn_DeletePlate.Name = "btn_DeletePlate";
-            btn_DeletePlate.Size = new Size(110, 22);
+            btn_DeletePlate.Size = new Size(124, 24);
             btn_DeletePlate.Text = "حذف";
             // 
             // btn_EditPlate
             // 
             btn_EditPlate.Name = "btn_EditPlate";
-            btn_EditPlate.Size = new Size(110, 22);
+            btn_EditPlate.Size = new Size(124, 24);
             btn_EditPlate.Text = "ویرایش";
             btn_EditPlate.Click += btn_EditPlate_Click;
             // 
@@ -523,10 +534,10 @@
             // 
             tbp_RegisteredPersons.Controls.Add(pnl_AddPerson);
             tbp_RegisteredPersons.Controls.Add(dgv_Persons);
-            tbp_RegisteredPersons.Location = new Point(4, 24);
+            tbp_RegisteredPersons.Location = new Point(4, 29);
             tbp_RegisteredPersons.Margin = new Padding(3, 4, 3, 4);
             tbp_RegisteredPersons.Name = "tbp_RegisteredPersons";
-            tbp_RegisteredPersons.Size = new Size(974, 675);
+            tbp_RegisteredPersons.Size = new Size(974, 670);
             tbp_RegisteredPersons.TabIndex = 3;
             tbp_RegisteredPersons.Text = "شهروندان ثبت شده";
             tbp_RegisteredPersons.UseVisualStyleBackColor = true;
@@ -553,7 +564,7 @@
             pnl_AddPerson.Controls.Add(lbl_LastName);
             pnl_AddPerson.Controls.Add(lbl_FirstName);
             pnl_AddPerson.Controls.Add(lbl_NationalCode);
-            pnl_AddPerson.Location = new Point(3, 479);
+            pnl_AddPerson.Location = new Point(3, 467);
             pnl_AddPerson.Name = "pnl_AddPerson";
             pnl_AddPerson.Size = new Size(968, 169);
             pnl_AddPerson.TabIndex = 1;
@@ -599,14 +610,14 @@
             rtb_Address.Location = new Point(140, 10);
             rtb_Address.Name = "rtb_Address";
             rtb_Address.RightToLeft = RightToLeft.Yes;
-            rtb_Address.Size = new Size(229, 115);
+            rtb_Address.Size = new Size(184, 115);
             rtb_Address.TabIndex = 15;
             rtb_Address.Text = "";
             // 
             // txt_About
             // 
             txt_About.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            txt_About.Location = new Point(415, 72);
+            txt_About.Location = new Point(379, 71);
             txt_About.Multiline = true;
             txt_About.Name = "txt_About";
             txt_About.RightToLeft = RightToLeft.Yes;
@@ -616,65 +627,65 @@
             // txt_Email
             // 
             txt_Email.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            txt_Email.Location = new Point(415, 41);
+            txt_Email.Location = new Point(379, 40);
             txt_Email.Name = "txt_Email";
             txt_Email.RightToLeft = RightToLeft.Yes;
-            txt_Email.Size = new Size(196, 25);
+            txt_Email.Size = new Size(196, 30);
             txt_Email.TabIndex = 13;
             // 
             // txt_PhoneNumber
             // 
             txt_PhoneNumber.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            txt_PhoneNumber.Location = new Point(415, 10);
+            txt_PhoneNumber.Location = new Point(379, 9);
             txt_PhoneNumber.Name = "txt_PhoneNumber";
             txt_PhoneNumber.RightToLeft = RightToLeft.Yes;
-            txt_PhoneNumber.Size = new Size(196, 25);
+            txt_PhoneNumber.Size = new Size(196, 30);
             txt_PhoneNumber.TabIndex = 12;
             // 
             // txt_FatherName
             // 
             txt_FatherName.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            txt_FatherName.Location = new Point(695, 100);
+            txt_FatherName.Location = new Point(659, 99);
             txt_FatherName.Name = "txt_FatherName";
             txt_FatherName.RightToLeft = RightToLeft.Yes;
-            txt_FatherName.Size = new Size(196, 25);
+            txt_FatherName.Size = new Size(196, 30);
             txt_FatherName.TabIndex = 11;
             // 
             // txt_LastName
             // 
             txt_LastName.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            txt_LastName.Location = new Point(695, 69);
+            txt_LastName.Location = new Point(659, 68);
             txt_LastName.Name = "txt_LastName";
             txt_LastName.RightToLeft = RightToLeft.Yes;
-            txt_LastName.Size = new Size(196, 25);
+            txt_LastName.Size = new Size(196, 30);
             txt_LastName.TabIndex = 10;
             // 
             // txt_FirstName
             // 
             txt_FirstName.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            txt_FirstName.Location = new Point(695, 38);
+            txt_FirstName.Location = new Point(659, 37);
             txt_FirstName.Name = "txt_FirstName";
             txt_FirstName.RightToLeft = RightToLeft.Yes;
-            txt_FirstName.Size = new Size(196, 25);
+            txt_FirstName.Size = new Size(196, 30);
             txt_FirstName.TabIndex = 9;
             // 
             // txt_NationalCode
             // 
             txt_NationalCode.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            txt_NationalCode.Location = new Point(695, 9);
+            txt_NationalCode.Location = new Point(659, 8);
             txt_NationalCode.Name = "txt_NationalCode";
             txt_NationalCode.RightToLeft = RightToLeft.Yes;
-            txt_NationalCode.Size = new Size(196, 25);
+            txt_NationalCode.Size = new Size(196, 30);
             txt_NationalCode.TabIndex = 8;
             // 
             // lbl_Address
             // 
             lbl_Address.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             lbl_Address.AutoSize = true;
-            lbl_Address.Location = new Point(375, 12);
+            lbl_Address.Location = new Point(330, 12);
             lbl_Address.Name = "lbl_Address";
             lbl_Address.RightToLeft = RightToLeft.Yes;
-            lbl_Address.Size = new Size(34, 18);
+            lbl_Address.Size = new Size(43, 22);
             lbl_Address.TabIndex = 7;
             lbl_Address.Text = "آدرس";
             // 
@@ -682,10 +693,10 @@
             // 
             lbl_About.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             lbl_About.AutoSize = true;
-            lbl_About.Location = new Point(617, 72);
+            lbl_About.Location = new Point(581, 71);
             lbl_About.Name = "lbl_About";
             lbl_About.RightToLeft = RightToLeft.Yes;
-            lbl_About.Size = new Size(72, 18);
+            lbl_About.Size = new Size(91, 22);
             lbl_About.TabIndex = 6;
             lbl_About.Text = "درباره شهروند";
             // 
@@ -693,10 +704,10 @@
             // 
             lbl_Email.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             lbl_Email.AutoSize = true;
-            lbl_Email.Location = new Point(617, 44);
+            lbl_Email.Location = new Point(581, 43);
             lbl_Email.Name = "lbl_Email";
             lbl_Email.RightToLeft = RightToLeft.Yes;
-            lbl_Email.Size = new Size(36, 18);
+            lbl_Email.Size = new Size(45, 22);
             lbl_Email.TabIndex = 5;
             lbl_Email.Text = "ایمیل";
             // 
@@ -704,10 +715,10 @@
             // 
             lbl_PhoneNumber.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             lbl_PhoneNumber.AutoSize = true;
-            lbl_PhoneNumber.Location = new Point(617, 13);
+            lbl_PhoneNumber.Location = new Point(581, 12);
             lbl_PhoneNumber.Name = "lbl_PhoneNumber";
             lbl_PhoneNumber.RightToLeft = RightToLeft.Yes;
-            lbl_PhoneNumber.Size = new Size(65, 18);
+            lbl_PhoneNumber.Size = new Size(83, 22);
             lbl_PhoneNumber.TabIndex = 4;
             lbl_PhoneNumber.Text = "شماره همراه";
             // 
@@ -715,10 +726,10 @@
             // 
             lbl_FatherName.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             lbl_FatherName.AutoSize = true;
-            lbl_FatherName.Location = new Point(897, 103);
+            lbl_FatherName.Location = new Point(861, 102);
             lbl_FatherName.Name = "lbl_FatherName";
             lbl_FatherName.RightToLeft = RightToLeft.Yes;
-            lbl_FatherName.Size = new Size(41, 18);
+            lbl_FatherName.Size = new Size(51, 22);
             lbl_FatherName.TabIndex = 3;
             lbl_FatherName.Text = "نام پدر";
             // 
@@ -726,10 +737,10 @@
             // 
             lbl_LastName.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             lbl_LastName.AutoSize = true;
-            lbl_LastName.Location = new Point(897, 72);
+            lbl_LastName.Location = new Point(861, 71);
             lbl_LastName.Name = "lbl_LastName";
             lbl_LastName.RightToLeft = RightToLeft.Yes;
-            lbl_LastName.Size = new Size(68, 18);
+            lbl_LastName.Size = new Size(86, 22);
             lbl_LastName.TabIndex = 2;
             lbl_LastName.Text = "نام خانوادگی";
             // 
@@ -737,10 +748,10 @@
             // 
             lbl_FirstName.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             lbl_FirstName.AutoSize = true;
-            lbl_FirstName.Location = new Point(897, 41);
+            lbl_FirstName.Location = new Point(861, 40);
             lbl_FirstName.Name = "lbl_FirstName";
             lbl_FirstName.RightToLeft = RightToLeft.Yes;
-            lbl_FirstName.Size = new Size(22, 18);
+            lbl_FirstName.Size = new Size(27, 22);
             lbl_FirstName.TabIndex = 1;
             lbl_FirstName.Text = "نام";
             // 
@@ -748,10 +759,10 @@
             // 
             lbl_NationalCode.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             lbl_NationalCode.AutoSize = true;
-            lbl_NationalCode.Location = new Point(897, 16);
+            lbl_NationalCode.Location = new Point(861, 15);
             lbl_NationalCode.Name = "lbl_NationalCode";
             lbl_NationalCode.RightToLeft = RightToLeft.Yes;
-            lbl_NationalCode.Size = new Size(38, 18);
+            lbl_NationalCode.Size = new Size(48, 22);
             lbl_NationalCode.TabIndex = 0;
             lbl_NationalCode.Text = "کدملی";
             // 
@@ -766,55 +777,64 @@
             dgv_Persons.Location = new Point(3, 3);
             dgv_Persons.Name = "dgv_Persons";
             dgv_Persons.RightToLeft = RightToLeft.Yes;
-            dgv_Persons.Size = new Size(968, 470);
+            dgv_Persons.RowHeadersWidth = 51;
+            dgv_Persons.Size = new Size(968, 458);
             dgv_Persons.TabIndex = 0;
             // 
             // col_persons_NationalCode
             // 
             col_persons_NationalCode.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_persons_NationalCode.HeaderText = "کدملی";
+            col_persons_NationalCode.MinimumWidth = 6;
             col_persons_NationalCode.Name = "col_persons_NationalCode";
             // 
             // col_persons_FirstName
             // 
             col_persons_FirstName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_persons_FirstName.HeaderText = "نام";
+            col_persons_FirstName.MinimumWidth = 6;
             col_persons_FirstName.Name = "col_persons_FirstName";
             // 
             // col_persons_LastName
             // 
             col_persons_LastName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_persons_LastName.HeaderText = "نام خانوادگی";
+            col_persons_LastName.MinimumWidth = 6;
             col_persons_LastName.Name = "col_persons_LastName";
             // 
             // col_persons_FatherName
             // 
             col_persons_FatherName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_persons_FatherName.HeaderText = "نام پدر";
+            col_persons_FatherName.MinimumWidth = 6;
             col_persons_FatherName.Name = "col_persons_FatherName";
             // 
             // col_persons_PhoneNumber
             // 
             col_persons_PhoneNumber.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_persons_PhoneNumber.HeaderText = "شماره همراه";
+            col_persons_PhoneNumber.MinimumWidth = 6;
             col_persons_PhoneNumber.Name = "col_persons_PhoneNumber";
             // 
             // col_persons_Email
             // 
             col_persons_Email.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_persons_Email.HeaderText = "ایمیل";
+            col_persons_Email.MinimumWidth = 6;
             col_persons_Email.Name = "col_persons_Email";
             // 
             // col_persons_About
             // 
             col_persons_About.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_persons_About.HeaderText = "درباره";
+            col_persons_About.MinimumWidth = 6;
             col_persons_About.Name = "col_persons_About";
             // 
             // col_persons_Address
             // 
             col_persons_Address.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             col_persons_Address.HeaderText = "آدرس";
+            col_persons_Address.MinimumWidth = 6;
             col_persons_Address.Name = "col_persons_Address";
             // 
             // btn_AboutUs
@@ -841,26 +861,27 @@
             // 
             // cms_PersonsTable
             // 
+            cms_PersonsTable.ImageScalingSize = new Size(20, 20);
             cms_PersonsTable.Items.AddRange(new ToolStripItem[] { btn_DeletePerson, btn_EditPerson });
             cms_PersonsTable.Name = "cms_PersonsTable";
-            cms_PersonsTable.Size = new Size(111, 48);
+            cms_PersonsTable.Size = new Size(125, 52);
             // 
             // btn_DeletePerson
             // 
             btn_DeletePerson.BackColor = Color.FromArgb(255, 192, 192);
             btn_DeletePerson.Name = "btn_DeletePerson";
-            btn_DeletePerson.Size = new Size(110, 22);
+            btn_DeletePerson.Size = new Size(124, 24);
             btn_DeletePerson.Text = "حذف";
             // 
             // btn_EditPerson
             // 
             btn_EditPerson.Name = "btn_EditPerson";
-            btn_EditPerson.Size = new Size(110, 22);
+            btn_EditPerson.Size = new Size(124, 24);
             btn_EditPerson.Text = "ویرایش";
             // 
             // FormMain
             // 
-            AutoScaleDimensions = new SizeF(7F, 18F);
+            AutoScaleDimensions = new SizeF(8F, 22F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1006, 732);
             Controls.Add(btn_PersonInfo);
